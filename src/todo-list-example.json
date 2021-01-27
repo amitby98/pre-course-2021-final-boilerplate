@@ -10,3 +10,11 @@
         "date": 1611661776177
     }
 ]
+
+
+<select id="priority-selector" name="number">
+<option disabled selected value>type of task</option>
+<option value="regular">Normal Task</option>
+<option value="must">Must Do Today</option>
+<option value="quickly">10 min "Just Do It"</option>
+</select>

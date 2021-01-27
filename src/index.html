@@ -17,13 +17,19 @@
         type="text"
         placeholder="What's your goal today?"
       />
-      <select id="priority-selector" name="number">
+      <select id="priority-selector">
         <option disabled selected value>importance</option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
         <option value="5">5</option>
+      </select>
+      <select id="task-type">
+        <option disabled selected value>type of task</option>
+        <option value="regular">Normal Task</option>
+        <option value="must">Must Do Today</option>
+        <option value="quickly">10 min "Just Do It"</option>
       </select>
       <button id="add-button" onclick="addTask()">Add</button>
     </form>
