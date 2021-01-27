@@ -1,0 +1,11 @@
+:root {
+  text-align: center;
+}
+h1 {
+  text-align: center;
+  margin-top: 40px;
+}
+.tasks {
+  display: flex;
+  flex-direction: column;
+}
