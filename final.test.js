@@ -108,14 +108,12 @@ describe(projectName, () => {
     await page.type("#text-input", firstTaskText);
     await page.select("#priority-selector", firstTaskPriority);
     await page.click("#add-button");
-
     await page.waitForSelector(".todo-text");
 
     const elements = await page.$$(".todo-text");
     const firstItem = await (
       await elements[0].getProperty("innerText")
     ).jsonValue();
-
     await page.waitForSelector(".todo-priority");
 
     const priorityElements = await page.$$(".todo-priority");
@@ -148,6 +146,7 @@ describe(projectName, () => {
     await page.type("#text-input", secondTaskText);
     await page.select("#priority-selector", secondTaskPriority);
     await page.click("#add-button");
+
     const inputElement = await page.$("#text-input");
     const currentInput = await (
       await inputElement.getProperty("value")
