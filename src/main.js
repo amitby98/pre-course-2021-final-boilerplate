@@ -23,7 +23,8 @@ function addTask() {
   } else {
     let label = document.createElement("label");
     label.setAttribute("for", input.id);
-    label.innerText = task;
+    label.innerText = getTaskText(task, new Date(), priorityInput);
+    label.className = findPriority(priorityInput);
 
     let div = document.createElement("div");
 
@@ -70,11 +71,47 @@ function addTask() {
     }
   }
 }
-//my-function
-function getTaskAsObject(text, priority, date) {
-  return {
-    text: text,
-    priority: priority,
-    date: date.now,
-  };
+function getTaskText(text, date, priority) {
+  return " " + priority + " " + text + " " + calculateTime(date) + " ";
 }
+
+function findPriority(priority) {
+  let priorityClassName = "";
+  switch (JSON.parse(priority)) {
+    case 1:
+      priorityClassName = "very-low";
+      break;
+    case 2:
+      priorityClassName = "low";
+      break;
+    case 3:
+      priorityClassName = "normal";
+      break;
+    case 4:
+      priorityClassName = "high";
+      break;
+    case 5:
+      priorityClassName = "very-high";
+      break;
+  }
+  return priorityClassName;
+}
+function calculateTime(time) {
+  let year = time.getFullYear();
+  let month = time.getMonth();
+  month = month + 1;
+  let day = time.getDate();
+  let hours = time.getHours();
+  let minutes = time.getMinutes();
+  let string = day + "/" + month + "/" + year + " " + hours + ":" + minutes;
+  return string;
+}
+
+//my-function
+// function getTaskAsObject(text, priority, date) {
+//   return {
+//     text: text,
+//     priority: priority,
+//     date: date.now,
+//   };
+// }

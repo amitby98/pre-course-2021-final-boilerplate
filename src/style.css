@@ -1,11 +1,31 @@
 :root {
   text-align: center;
 }
-h1 {
+*/ h1 {
   text-align: center;
   margin-top: 40px;
 }
 .tasks {
   display: flex;
   flex-direction: column;
+}
+
+.very-low {
+  background-color: lightgray;
+}
+
+.low {
+  background-color: gray;
+}
+
+.normal {
+  background-color: white;
+}
+
+.high {
+  background-color: rgb(219, 125, 125);
+}
+
+.very-high {
+  background-color: tomato;
 }
