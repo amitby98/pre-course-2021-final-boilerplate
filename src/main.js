@@ -12,24 +12,78 @@ filterButton.addEventListener("click", (e) => {
     filter += 1;
   } else if (filter === 1) {
     filter += 1;
-    filterButton.innerText = "Importance";
-    sortByImportance();
+    filterButton.innerText = "High importance";
+    sortByImportance(true);
   } else if (filter >= 2) {
-    filterButton.innerText = "Type of task";
+    filterButton.innerText = "Low importance";
+    sortByImportance(false);
     filter = 0;
-    sortByType();
   }
 });
 
-//function to sort all tasks by their type.
-function sortByType() {
-  let divs = document.getElementsByClassName("todo-container");
-  for()
+//function to sort tasks by importance.
+function sortByImportance(increase) {
+  let todoArray = document.getElementsByClassName("todo-container");
+  let tasksContainer = document.getElementById("tasks-container");
+  let priorityArray1 = [];
+  let priorityArray2 = [];
+  let priorityArray3 = [];
+  let priorityArray4 = [];
+  let priorityArray5 = [];
+  for (i = 0; i < todoArray.length; i++) {
+    let taskDiv = todoArray[i]; //Task div
+    let priority = JSON.parse(taskDiv.getElementsByTagName("div")[0].innerText);
+    switch (priority) {
+      case 1:
+        priorityArray1.push(taskDiv);
+        taskDiv.remove;
+        break;
+      case 2:
+        priorityArray2.push(taskDiv);
+        taskDiv.remove;
+        break;
+      case 3:
+        priorityArray3.push(taskDiv);
+        taskDiv.remove;
+        break;
+      case 4:
+        priorityArray4.push(taskDiv);
+        taskDiv.remove;
+        break;
+      case 5:
+        priorityArray5.push(taskDiv);
+        taskDiv.remove;
+        break;
+    }
+  }
+  let priorities = [
+    priorityArray1,
+    priorityArray2,
+    priorityArray3,
+    priorityArray4,
+    priorityArray5,
+  ];
+  let organized = [];
+  for (let i = 0; i < priorities.length; i++) {
+    if (priorities[i].length > 0) {
+      for (let z = 0; z < priorities[i].length; z++) {
+        if (increase) {
+          organized.push(priorities[i][z]);
+        } else {
+          organized.unshift(priorities[i][z]);
+        }
+      }
+    }
+  }
+  for (let i = 0; i < organized.length; i++) {
+    tasksContainer.appendChild(organized[i]);
+  }
 }
 
-//function to sort tasks by importance.
-function sortByImportance() {
-}
+// //function to sort all tasks by their type.
+// function sortByType() {
+//   let divs = document.getElementsByClassName("todo-container");
+// }
 
 //function for counter
 function counterUpdated() {
@@ -46,11 +100,9 @@ function counterUpdated() {
 
   //added counter to tasks left
   document.getElementById("counter").innerText = todoItemsCount;
-  console.log(document.getElementById("counter").innerText);
 
   //added counter to complete tasks
   document.getElementById("counter-done").innerText = doneItemsCount;
-  console.log(document.getElementById("counter-done").innerText);
 }
 
 //function to add tasks
@@ -65,9 +117,6 @@ function addTask() {
 
   //Find importance number
   let priorityInput = document.getElementById("priority-selector").value;
-  console.log(priorityInput);
-  let taskType = document.getElementById("priority-selector2").value;
-  console.log(taskType);
   if (priorityInput < 1 || priorityInput > 5 || task.length < 1) {
     alert("You need to fill all the fields!");
   } else {
@@ -81,13 +130,11 @@ function addTask() {
     let divTaskText = document.createElement("div");
     divTaskText.innerText = task;
     divTaskText.className = "todo-text";
-    // divTaskText.classList.add(findPriority(priorityInput));
 
     // create the div for displaying the date
     let divDate = document.createElement("div");
     divDate.innerText = calculateTime(new Date());
     divDate.className = "todo-created-at";
-    // divDate.classList.add(findPriority(priorityInput));
 
     // create the task container div
     let div = document.createElement("div");

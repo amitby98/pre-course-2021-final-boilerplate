@@ -92,3 +92,11 @@ form {
   border-color: white;
   background-color: orange;
 }
+/* #item0 {
+  height: 30px;
+  width: 30px;
+} */
+/* #item0 input:checked {
+  --s: 2px;
+  transition-delay: 0.4s;
+} */
