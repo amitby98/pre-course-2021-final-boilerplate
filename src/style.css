@@ -62,7 +62,7 @@ h3 {
 form {
   font-size: 23px;
 }
-.style {
+.formStyle {
   background-color: black;
   border: 0;
   outline: 2px solid transparent;
@@ -73,7 +73,22 @@ form {
   color: white;
 }
 
-.style:hover,
-.style:focus {
+.formStyle:hover,
+.formStyle:focus {
   outline-color: yellow;
+}
+
+.sort {
+  background-color: black;
+  width: 150px;
+  height: 50px;
+  color: white;
+  font-size: 20px;
+  margin-top: 40px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+}
+.sort:hover {
+  border-color: white;
+  background-color: orange;
 }

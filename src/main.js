@@ -2,7 +2,36 @@ idCounter = 0;
 todoItemsCount = 0;
 doneItemsCount = 0;
 
-////function for counter
+//filter button
+let filter = 1;
+let filterButton = document.getElementById("sort-button");
+
+filterButton.addEventListener("click", (e) => {
+  if (filter === 0) {
+    filterButton.innerText = "No Filter";
+    filter += 1;
+  } else if (filter === 1) {
+    filter += 1;
+    filterButton.innerText = "Importance";
+    sortByImportance();
+  } else if (filter >= 2) {
+    filterButton.innerText = "Type of task";
+    filter = 0;
+    sortByType();
+  }
+});
+
+//function to sort all tasks by their type.
+function sortByType() {
+  let divs = document.getElementsByClassName("todo-container");
+  for()
+}
+
+//function to sort tasks by importance.
+function sortByImportance() {
+}
+
+//function for counter
 function counterUpdated() {
   if (todoItemsCount === 1) {
     document.getElementById("empty-list-span").style.display = "none";
@@ -39,12 +68,7 @@ function addTask() {
   console.log(priorityInput);
   let taskType = document.getElementById("priority-selector2").value;
   console.log(taskType);
-  if (
-    priorityInput < 1 ||
-    priorityInput > 5 ||
-    task.length < 1 ||
-    taskType.length < 1
-  ) {
+  if (priorityInput < 1 || priorityInput > 5 || task.length < 1) {
     alert("You need to fill all the fields!");
   } else {
     // create the div for displaying the priority
@@ -95,10 +119,10 @@ function addTask() {
     // add the todo-container to the div task list
     taskDiv.appendChild(div);
 
-    // clear inputs after adding a task
+    // reset inputs after adding a task
     document.getElementsByTagName("input")[0].value = "";
     document.getElementsByTagName("select")[0].value = "";
-    document.getElementsByTagName("select")[1].value = "";
+    document.getElementsByTagName("select")[1].value = "regular";
 
     // update counters
     idCounter++;
