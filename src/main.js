@@ -35,29 +35,34 @@ function sortByImportance(increase) {
   let priorityArray4 = [];
   let priorityArray5 = [];
   for (i = 0; i < todoArray.length; i++) {
-    let taskDiv = todoArray[i]; //Task div
-    let priority = JSON.parse(taskDiv.getElementsByTagName("div")[0].innerText);
-    switch (priority) {
-      case 1:
-        priorityArray1.push(taskDiv);
-        taskDiv.remove;
-        break;
-      case 2:
-        priorityArray2.push(taskDiv);
-        taskDiv.remove;
-        break;
-      case 3:
-        priorityArray3.push(taskDiv);
-        taskDiv.remove;
-        break;
-      case 4:
-        priorityArray4.push(taskDiv);
-        taskDiv.remove;
-        break;
-      case 5:
-        priorityArray5.push(taskDiv);
-        taskDiv.remove;
-        break;
+    let taskDiv = todoArray[i];
+    let checkBox = taskDiv.getElementsByClassName("checkbox")[0];
+    if (!checkBox.checked) {
+      let priority = JSON.parse(
+        taskDiv.getElementsByTagName("div")[0].innerText
+      );
+      switch (priority) {
+        case 1:
+          priorityArray1.push(taskDiv);
+          taskDiv.remove;
+          break;
+        case 2:
+          priorityArray2.push(taskDiv);
+          taskDiv.remove;
+          break;
+        case 3:
+          priorityArray3.push(taskDiv);
+          taskDiv.remove;
+          break;
+        case 4:
+          priorityArray4.push(taskDiv);
+          taskDiv.remove;
+          break;
+        case 5:
+          priorityArray5.push(taskDiv);
+          taskDiv.remove;
+          break;
+      }
     }
   }
   let priorities = [
@@ -92,21 +97,24 @@ function sortByType(increase) {
   let typeArray2 = [];
   let typeArray3 = [];
   for (i = 0; i < todoArray.length; i++) {
-    let taskDiv = todoArray[i]; //Task div
-    let type = taskDiv.getElementsByTagName("div")[3].innerText;
-    switch (type) {
-      case "Must":
-        typeArray1.push(taskDiv);
-        taskDiv.remove;
-        break;
-      case "Quickly":
-        typeArray2.push(taskDiv);
-        taskDiv.remove;
-        break;
-      case "Normal":
-        typeArray3.push(taskDiv);
-        taskDiv.remove;
-        break;
+    let taskDiv = todoArray[i];
+    let checkBox = taskDiv.getElementsByClassName("checkbox")[0];
+    if (!checkBox.checked) {
+      let type = taskDiv.getElementsByTagName("div")[3].innerText;
+      switch (type) {
+        case "Must":
+          typeArray1.push(taskDiv);
+          taskDiv.remove;
+          break;
+        case "Quickly":
+          typeArray2.push(taskDiv);
+          taskDiv.remove;
+          break;
+        case "Normal":
+          typeArray3.push(taskDiv);
+          taskDiv.remove;
+          break;
+      }
     }
   }
   let types = [typeArray1, typeArray2, typeArray3];
@@ -155,6 +163,9 @@ function addTask() {
   let input = document.createElement("input");
   input.type = "checkbox";
   input.id = "item" + idCounter;
+  /////remove
+  input.className = "checkbox";
+  /////
   input.onclick = taskChecked;
 
   //Find importance number
@@ -199,7 +210,7 @@ function addTask() {
       counterUpdated();
     });
 
-    //add type div
+    //create the type div
     let divType = document.createElement("div");
     divType.className = typeInput;
     divType.innerText = typeInput;
