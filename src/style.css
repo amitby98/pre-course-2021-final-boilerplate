@@ -6,36 +6,8 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover; */
-  /* background-color: #b39877; */
+  background-color: #8b765a;
   color: white;
-}
-/* body {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-} */
-body {
-  /* background: linear-gradient(-45deg, #f5deb3, #d2b48c, #f5f5dc, #775e28);*/
-  background: linear-gradient(
-    -45deg,
-    rgb(90, 99, 105),
-    rgb(59, 62, 66),
-    rgb(20, 20, 20)
-  );
-  background-size: 400% 400%;
-  animation: gradient 10s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 h1 {
   text-align: center;
@@ -151,15 +123,25 @@ form {
   visibility: hidden;
 }
 
-/* .labelComments {
+.labelComments {
   font-size: 30px;
   font-family: inherit;
 }
-.comments {
+.notes {
   font-size: 20px;
   font-family: inherit;
   border: 10px solid;
   border-color: aqua;
+  /* background-color: #222023; */
+}
+#comment {
+  background-image: url("./notes.jpeg");
+  /* height: 100%; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+/* #hide-list {
 } */
 /* #item0 {
   height: 30px;

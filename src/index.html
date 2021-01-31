@@ -7,16 +7,16 @@
     <link id="theme" rel="stylesheet" href="./style.css" />
     <script src="utils.js"></script>
   </head>
-  <body>
-    <!-- <h1>
+  <body onload="loadTasks()">
+    <h1>
       <img
         class="titleImage"
-        src="./try.jpeg"
+        src="./header.jpeg"
         alt="make it happen"
-        width="1000"
+        width="1100"
         height="200"
       />
-    </h1> -->
+    </h1>
     <form onsubmit="return false">
       <input
         class="formStyle"
@@ -49,7 +49,6 @@
       <section class="header-uncompleted">
         <h3><span id="counter"></span> Uncompleted :</h3>
         <div id="tasks-container" class="tasks">
-          <button onclick="getText()">tasks</button>
           <span id="empty-list-span">Your task list is empty :)</span>
         </div>
       </section>
@@ -62,13 +61,14 @@
         </div>
       </section>
     </div>
-    <!-- <label for="comments" class="labelComments"> Notes :</label><br /><br />
+    <label for="notes" class="labelComments"> Notes :</label><br /><br />
     <textarea
-      class="comments"
+      class="notes"
+      id="comment"
       cols="45"
-      rows="8"
+      rows="7"
       placeholder="Anything you wanna remember?"
-    ></textarea> -->
+    ></textarea>
 
     <script src="./main.js"></script>
   </body>

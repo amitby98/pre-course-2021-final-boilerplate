@@ -2,6 +2,8 @@ idCounter = 0;
 todoItemsCount = 0;
 doneItemsCount = 0;
 isHidden = false;
+JSONBIN_KEY = "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS";
+idMap = {};
 
 //filter button
 let filter = 1;
@@ -235,6 +237,7 @@ function addTask() {
 
     //create the type div
     let divType = document.createElement("div");
+    divType.id = "divType";
     divType.className = typeInput;
     divType.innerText = typeInput;
     console.log(divType.className);
@@ -261,6 +264,18 @@ function addTask() {
     todoItemsCount++;
 
     counterUpdated();
+
+    // save the task to jsonBin
+    let taskObject = {
+      task,
+      checked: false,
+      priority: priorityInput,
+      date,
+      type: typeInput,
+    };
+    saveTaskToJsonBin(taskObject, getCollectionId(false), (binId) => {
+      idMap[input.id] = binId;
+    });
   }
 
   //function to update items counter
@@ -279,9 +294,38 @@ function addTask() {
       taskDoneDiv.appendChild(div);
       todoItemsCount--;
       doneItemsCount++;
+
+      let localId = event.target.id;
+      let binId = idMap[localId];
+      deleteTaskFromJsonBin(binId, () => {
+        let taskObject = getTaskFromDivElement(div);
+
+        saveTaskToJsonBin(taskObject, getCollectionId(true), (binId) => {
+          idMap[localId] = binId;
+        });
+      });
     }
     counterUpdated();
   }
+}
+
+function getTaskFromDivElement(divElement) {
+  let checked = divElement.getElementsByTagName("input")[0].innerText;
+  let taskText = divElement.getElementsByClassName("todo-text")[0].innerText;
+  let priority = divElement.getElementsByClassName("todo-priority")[0]
+    .innerText;
+  let date = divElement.getElementsByClassName("todo-created-at")[0].innerText;
+  let type = document.getElementById("divType").innerText;
+
+  let taskObject = {
+    task: taskText,
+    checked,
+    priority,
+    date,
+    type,
+  };
+  console.log(taskObject);
+  return taskObject;
 }
 
 //added style to the tasks
@@ -349,75 +393,74 @@ document.getElementById("hide-list").addEventListener("click", (e) => {
   }
 });
 
-// ///////fix it
+function loadTasks() {
+  let req2 = new XMLHttpRequest();
 
-// function getText() {
-//   let req = new XMLHttpRequest();
+  req2.onreadystatechange = () => {
+    if (req2.readyState == XMLHttpRequest.DONE) {
+      console.log(req2.responseText);
+    }
+  };
 
-//   req.onreadystatechange = () => {
-//     if (req.readyState == XMLHttpRequest.DONE) {
-//       console.log(req.responseText);
-//     }
-//   };
-//   req.open("POST", "https://api.jsonbin.io/b", true);
-//   req.setRequestHeader("Content-Type", "application/json");
-//   req.setRequestHeader(
-//     "secret-key",
-//     "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS"
-//   );
-//   req.setRequestHeader("collection-id", "60157decb41a937c6d544f9d");
-//   let data = req.send();
+  let id = "601672210ba5ca5799d17cd2";
+  req2.open("GET", "https://api.jsonbin.io/v3/b/" + id + "/latest", true);
+  req2.setRequestHeader("X-Master-Key", JSONBIN_KEY);
+  req2.send();
 
-//   console.log(data);
-// }
-// let obj = JSON.parse(data);
-// console.log(obj.list);
+  let req = new XMLHttpRequest();
 
-// let text =
-//   '{ "list" : [' +
-//   '{ "priority"":"" , "priorityInput":"" },' +
-//   '{ "task":"" , " task":"" },' +
-//   '{ "typeInput":"" , "typeInput":"" } ]}';
-// obj = JSON.parse(text);
-// console.log(text);
-// console.log(obj.list[1].priority + " " + obj.list[1].priorityInput);
+  req.onreadystatechange = () => {
+    if (req.readyState == XMLHttpRequest.DONE) {
+      console.log(req.responseText);
+    }
+  };
 
-// var text =
-//   '{ "employees" : [' +
-//   '{ "firstName":"John" , "lastName":"Doe" },' +
-//   '{ "firstName":"Anna" , "lastName":"Smith" },' +
-//   '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
-// var obj = JSON.parse(text);
-// console.log(text);
-// console.log(obj.employees[1].firstName + " " + obj.employees[1].lastName);
+  // first - load the todo-tasks list
+  let collectionIdOfTodoTasks = getCollectionId(false);
+  req.open(
+    "GET",
+    "https://api.jsonbin.io/v3/c/" + collectionIdOfTodoTasks + "/bins/1",
+    true
+  );
+  req.setRequestHeader("X-Master-Key", JSONBIN_KEY);
+  req.send();
+}
 
-// function getText() {
-//   let req = new XMLHttpRequest();
+function getCollectionId(isDone) {
+  return isDone ? "6016697b0ba5ca5799d17a26" : "601669690ba5ca5799d17a1f";
+}
 
-//   req.onreadystatechange = () => {
-//     if (req.readyState == XMLHttpRequest.DONE) {
-//       console.log(req.responseText);
-//     }
-//   };
+function deleteTaskFromJsonBin(id, doAfter) {
+  let req = new XMLHttpRequest();
 
-//   req.open("GET", "https://api.jsonbin.io/b/", true);
-//   req.setRequestHeader(
-//     "secret-key",
-//     "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS"
-//   );
-//   req.setRequestHeader("collection-id", "60157decb41a937c6d544f9d");
-//   let data = req.send();
+  req.onreadystatechange = () => {
+    if (req.readyState == XMLHttpRequest.DONE) {
+      console.log(req.responseText);
+      if (doAfter) doAfter();
+    }
+  };
 
-//   console.log(data);
-// }
-// var obj = JSON.parse(data);
-// console.log(obj.list);
+  req.open("DELETE", "https://api.jsonbin.io/v3/b/" + id, true);
+  req.setRequestHeader("X-Master-Key", JSONBIN_KEY);
+  req.send();
+}
 
-//   var text =
-//     '{ "employees" : [' +
-//     '{ "firstName":"John" , "lastName":"Doe" },' +
-//     '{ "firstName":"Anna" , "lastName":"Smith" },' +
-//     '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
-//   var obj = JSON.parse(text);
-//   console.log(text);
-//   console.log(obj.employees[1].firstName + " " + obj.employees[1].lastName);
+function saveTaskToJsonBin(task, collectionId, callback) {
+  let jsonString = JSON.stringify(task);
+
+  let req = new XMLHttpRequest();
+  req.onreadystatechange = () => {
+    if (req.readyState == XMLHttpRequest.DONE) {
+      console.log(req.responseText);
+      let jsonObject = JSON.parse(req.responseText);
+      if (callback) {
+        callback(jsonObject.metadata.id);
+      }
+    }
+  };
+  req.open("POST", "https://api.jsonbin.io/v3/b", true);
+  req.setRequestHeader("Content-Type", "application/json");
+  req.setRequestHeader("X-COLLECTION-ID", collectionId);
+  req.setRequestHeader("X-Master-Key", JSONBIN_KEY);
+  req.send(jsonString);
+}
