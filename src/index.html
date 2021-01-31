@@ -4,19 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My TODO List</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link id="theme" rel="stylesheet" href="./style.css" />
     <script src="utils.js"></script>
   </head>
   <body>
-    <h1>
+    <!-- <h1>
       <img
         class="titleImage"
-        src="./make it happen.jpg"
+        src="./try.jpeg"
         alt="make it happen"
-        width="1100"
-        height="170"
+        width="1000"
+        height="200"
       />
-    </h1>
+    </h1> -->
     <form onsubmit="return false">
       <input
         class="formStyle"
@@ -39,16 +39,22 @@
       </select>
       <button id="add-button" class="formStyle" onclick="addTask()">Add</button>
     </form>
+    <!-- <input type="text" id="search-input" placeholder="Search a task..." />
+    <button id="search-button">search</button> -->
+    <div id="buttons">
+      <button id="sort-button" class="buttons">Sort By:</button>
+      <button id="dark-mode" class="buttons">Dark Mode</button>
+    </div>
     <div class="to-do-header">
       <section class="header-uncompleted">
         <h3><span id="counter"></span> Uncompleted :</h3>
         <div id="tasks-container" class="tasks">
+          <button onclick="getText()">tasks</button>
           <span id="empty-list-span">Your task list is empty :)</span>
         </div>
       </section>
-      <button id="sort-button" class="sort">No Filter</button>
       <section class="header-completed">
-        <h3><span id="counter-done"></span> Completed :</h3>
+        <h3 id="hide-list"><span id="counter-done"></span> Completed :</h3>
         <div id="tasks-done-container" class="tasks">
           <span id="empty-list-done-span"
             >You didn't finish any task today :(</span
@@ -56,6 +62,13 @@
         </div>
       </section>
     </div>
+    <!-- <label for="comments" class="labelComments"> Notes :</label><br /><br />
+    <textarea
+      class="comments"
+      cols="45"
+      rows="8"
+      placeholder="Anything you wanna remember?"
+    ></textarea> -->
 
     <script src="./main.js"></script>
   </body>

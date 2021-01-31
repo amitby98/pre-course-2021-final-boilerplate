@@ -1,11 +1,11 @@
 idCounter = 0;
 todoItemsCount = 0;
 doneItemsCount = 0;
+isHidden = false;
 
 //filter button
 let filter = 1;
 let filterButton = document.getElementById("sort-button");
-
 filterButton.addEventListener("click", (e) => {
   if (filter === 0) {
     filterButton.innerText = "No Filter";
@@ -135,6 +135,25 @@ function sortByType(increase) {
   }
 }
 
+//function for edit button
+function getEditTaskButton(todoDiv, textDiv) {
+  let editButton = document.createElement("button");
+  editButton.innerText = "Edit";
+  todoDiv.appendChild(editButton);
+  editButton.addEventListener("click", (e) => {
+    let newText = window.prompt("Type your changes.");
+    if (newText.length >= 1) {
+      if (newText.length > 40) {
+        alert("Your new task text is too long!");
+      } else {
+        textDiv.innerText = newText;
+      }
+    } else {
+      alert("New task is too short!");
+    }
+  });
+}
+
 //function for counter
 function counterUpdated() {
   if (todoItemsCount === 1) {
@@ -163,15 +182,18 @@ function addTask() {
   let input = document.createElement("input");
   input.type = "checkbox";
   input.id = "item" + idCounter;
-  /////remove
   input.className = "checkbox";
-  /////
   input.onclick = taskChecked;
 
   //Find importance number
   let priorityInput = document.getElementById("priority-selector").value;
   let typeInput = document.getElementById("priority-selector2").value;
-  if (priorityInput < 1 || priorityInput > 5 || task.length < 1) {
+  if (
+    priorityInput < 1 ||
+    priorityInput > 5 ||
+    task.length < 1 ||
+    task.length > 40
+  ) {
     alert("You need to fill all the fields!");
   } else {
     // create the div for displaying the priority
@@ -187,7 +209,8 @@ function addTask() {
 
     // create the div for displaying the date
     let divDate = document.createElement("div");
-    divDate.innerText = calculateTime(new Date());
+    let date = calculateTime(new Date());
+    divDate.innerText = date;
     divDate.className = "todo-created-at";
 
     // create the task container div
@@ -222,6 +245,7 @@ function addTask() {
     div.appendChild(divTaskText);
     div.appendChild(divDate);
     div.appendChild(divType);
+    getEditTaskButton(div, divTaskText);
     div.appendChild(removeButton);
 
     // add the todo-container to the div task list
@@ -244,7 +268,9 @@ function addTask() {
     let div = event.target.parentNode;
     let taskDiv = document.getElementById("tasks-container");
     let taskDoneDiv = document.getElementById("tasks-done-container");
-
+    if (isHidden) {
+      div.classList.add("hidden");
+    }
     if (!event.target.checked) {
       taskDiv.appendChild(div);
       todoItemsCount++;
@@ -295,7 +321,103 @@ function calculateTime(time) {
   if (hours < 10) {
     hours = "0" + hours;
   }
-  let string =
-    day + "/" + month + "/" + year + " " + hours + ":" + minutes + "   ";
+  let string = day + "/" + month + "/" + year + " " + hours + ":" + minutes;
   return string;
 }
+//function to hide completed tasks
+document.getElementById("hide-list").addEventListener("click", (e) => {
+  let array = document
+    .getElementById("tasks-done-container")
+    .getElementsByTagName("div");
+
+  if (isHidden) {
+    isHidden = false;
+  } else {
+    isHidden = true;
+  }
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].className.includes("todo-container")) {
+      if (isHidden) {
+        let todo = array[i];
+        todo.classList.add("hidden");
+      } else {
+        if (array[i].className.includes("hidden")) {
+          array[i].className = array[i].className.replace(" hidden", "");
+        }
+      }
+    }
+  }
+});
+
+// ///////fix it
+
+// function getText() {
+//   let req = new XMLHttpRequest();
+
+//   req.onreadystatechange = () => {
+//     if (req.readyState == XMLHttpRequest.DONE) {
+//       console.log(req.responseText);
+//     }
+//   };
+//   req.open("POST", "https://api.jsonbin.io/b", true);
+//   req.setRequestHeader("Content-Type", "application/json");
+//   req.setRequestHeader(
+//     "secret-key",
+//     "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS"
+//   );
+//   req.setRequestHeader("collection-id", "60157decb41a937c6d544f9d");
+//   let data = req.send();
+
+//   console.log(data);
+// }
+// let obj = JSON.parse(data);
+// console.log(obj.list);
+
+// let text =
+//   '{ "list" : [' +
+//   '{ "priority"":"" , "priorityInput":"" },' +
+//   '{ "task":"" , " task":"" },' +
+//   '{ "typeInput":"" , "typeInput":"" } ]}';
+// obj = JSON.parse(text);
+// console.log(text);
+// console.log(obj.list[1].priority + " " + obj.list[1].priorityInput);
+
+// var text =
+//   '{ "employees" : [' +
+//   '{ "firstName":"John" , "lastName":"Doe" },' +
+//   '{ "firstName":"Anna" , "lastName":"Smith" },' +
+//   '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+// var obj = JSON.parse(text);
+// console.log(text);
+// console.log(obj.employees[1].firstName + " " + obj.employees[1].lastName);
+
+// function getText() {
+//   let req = new XMLHttpRequest();
+
+//   req.onreadystatechange = () => {
+//     if (req.readyState == XMLHttpRequest.DONE) {
+//       console.log(req.responseText);
+//     }
+//   };
+
+//   req.open("GET", "https://api.jsonbin.io/b/", true);
+//   req.setRequestHeader(
+//     "secret-key",
+//     "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS"
+//   );
+//   req.setRequestHeader("collection-id", "60157decb41a937c6d544f9d");
+//   let data = req.send();
+
+//   console.log(data);
+// }
+// var obj = JSON.parse(data);
+// console.log(obj.list);
+
+//   var text =
+//     '{ "employees" : [' +
+//     '{ "firstName":"John" , "lastName":"Doe" },' +
+//     '{ "firstName":"Anna" , "lastName":"Smith" },' +
+//     '{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+//   var obj = JSON.parse(text);
+//   console.log(text);
+//   console.log(obj.employees[1].firstName + " " + obj.employees[1].lastName);
