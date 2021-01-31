@@ -5,18 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My TODO List</title>
     <link id="theme" rel="stylesheet" href="./style.css" />
-    <script src="utils.js"></script>
+    <script src="./utils.js"></script>
   </head>
   <body onload="loadTasks()">
-    <h1>
-      <img
-        class="titleImage"
-        src="./header.jpeg"
-        alt="make it happen"
-        width="1100"
-        height="200"
-      />
-    </h1>
+    <h1 class="header"></h1>
     <form onsubmit="return false">
       <input
         class="formStyle"
@@ -44,6 +36,7 @@
     <div id="buttons">
       <button id="sort-button" class="buttons">Sort By:</button>
       <button id="dark-mode" class="buttons">Dark Mode</button>
+      <!-- <button id="clear" class="buttons">Clear</button> -->
     </div>
     <div class="to-do-header">
       <section class="header-uncompleted">
@@ -69,7 +62,6 @@
       rows="7"
       placeholder="Anything you wanna remember?"
     ></textarea>
-
     <script src="./main.js"></script>
   </body>
 </html>

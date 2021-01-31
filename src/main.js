@@ -1,9 +1,106 @@
 idCounter = 0;
-todoItemsCount = 0;
-doneItemsCount = 0;
 isHidden = false;
-JSONBIN_KEY = "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS";
+let darkButton = document.getElementById("dark-mode");
+// let clearButton = document.getElementById("clear");
 idMap = {};
+appData = {
+  todo: [],
+  done: [],
+};
+
+// This function loads the data from the JSON.BIN and then create the DOM elements
+async function loadTasks() {
+  // first - get the data from the json.bin
+  appData = await getPersistent(MY_BIN_ID);
+
+  let taskDiv = document.getElementById("tasks-container");
+  let taskDoneDiv = document.getElementById("tasks-done-container");
+  // second - create the todo list
+  appData.todo.forEach(async (taskObject) => {
+    let div = await createTaskDomElements(taskObject, false);
+    taskDiv.appendChild(div);
+  });
+
+  // third - create the done list
+  appData.done.forEach(async (taskObject) => {
+    let div = await createTaskDomElements(taskObject, true);
+    taskDoneDiv.appendChild(div);
+  });
+
+  idCounter = appData.done.length + appData.todo.length + 1;
+  counterUpdated();
+}
+
+// this function gets a task object and create a div with all the elements of the task inside
+// the function returns the div container of the task
+async function createTaskDomElements(taskObject, isChecked) {
+  // create the div checkbox
+  let input = document.createElement("input");
+  input.type = "checkbox";
+  input.id = taskObject.id;
+  input.className = "checkbox";
+  input.checked = isChecked;
+  input.onclick = taskChecked;
+
+  // create the div for displaying the priority
+  let divPriority = document.createElement("div");
+  divPriority.innerText = taskObject.priority;
+  divPriority.className = "todo-priority";
+  divPriority.classList.add(findPriority(taskObject.priority));
+
+  // create the div for displaying the text of the task
+  let divTaskText = document.createElement("div");
+  divTaskText.innerText = taskObject.task;
+  divTaskText.className = "todo-text";
+
+  // create the div for displaying the date
+  let divDate = document.createElement("div");
+  divDate.innerText = taskObject.date;
+  divDate.className = "todo-created-at";
+
+  // create the task container div
+  let div = document.createElement("div");
+  div.className = "todo-container";
+
+  // create the remove button
+  let removeButton = document.createElement("button");
+  removeButton.className = "remove-button";
+  removeButton.innerText = "remove";
+  removeButton.addEventListener("click", (e) => {
+    let localId = input.id;
+    if (input.checked) {
+      document.getElementById("tasks-done-container").removeChild(div);
+
+      let taskObject = appData.done.find((x) => x.id == localId);
+      appData.done.splice(appData.done.indexOf(taskObject), 1);
+    } else {
+      document.getElementById("tasks-container").removeChild(div);
+
+      let taskObject = appData.todo.find((x) => x.id == localId);
+      appData.todo.splice(appData.todo.indexOf(taskObject), 1);
+    }
+
+    setPersistent(MY_BIN_ID, appData);
+    counterUpdated();
+  });
+
+  //create the type div
+  let divType = document.createElement("div");
+  divType.id = "divType";
+  divType.className = taskObject.type;
+  divType.innerText = taskObject.type;
+
+  // add todo elements to the todo-container
+  div.appendChild(input);
+  div.appendChild(divPriority);
+  div.appendChild(divTaskText);
+  div.appendChild(divDate);
+  div.appendChild(divType);
+  getEditTaskButton(div, divTaskText);
+  div.appendChild(removeButton);
+
+  return div;
+}
 
 //filter button
 let filter = 1;
@@ -24,6 +121,31 @@ filterButton.addEventListener("click", (e) => {
     filterButton.innerText = "Type of task";
     sortByType(true);
     filter = 0;
+  }
+});
+
+// //clear the completed list
+// clearButton.addEventListener("click", (e) => {
+//   document.getElementById("counter-done").innerText = "0";
+//   removeDone();
+// });
+
+// function removeDone() {
+//   let taskDoneDiv = document.getElementById("tasks-done-container");
+//   let array = taskDoneDiv.getElementsByClassName("todo-container");
+//   for (let i = 0; i < array.length; i++) {
+//     let task = array[i];
+//     task.remove();
+//   }
+// }
+
+//dark mode button
+darkButton.addEventListener("click", (e) => {
+  let theme = document.getElementById("theme");
+  if (theme.href.includes("style")) {
+    theme.href = "darkmode.css";
+  } else {
+    document.getElementById("theme").href = "style.css";
   }
 });
 
@@ -158,34 +280,28 @@ function getEditTaskButton(todoDiv, textDiv) {
 
 //function for counter
 function counterUpdated() {
-  if (todoItemsCount === 1) {
+  if (appData.todo.length >= 1) {
     document.getElementById("empty-list-span").style.display = "none";
-  } else if (todoItemsCount === 0) {
+  } else if (appData.todo.length === 0) {
     document.getElementById("empty-list-span").style.display = "block";
   }
-  if (doneItemsCount === 1) {
+  if (appData.done.length >= 1) {
     document.getElementById("empty-list-done-span").style.display = "none";
-  } else if (doneItemsCount === 0) {
+  } else if (appData.done.length === 0) {
     document.getElementById("empty-list-done-span").style.display = "block";
   }
 
   //added counter to tasks left
-  document.getElementById("counter").innerText = todoItemsCount;
+  document.getElementById("counter").innerText = appData.todo.length;
 
   //added counter to complete tasks
-  document.getElementById("counter-done").innerText = doneItemsCount;
+  document.getElementById("counter-done").innerText = appData.done.length;
 }
 
 //function to add tasks
-function addTask() {
+async function addTask() {
   let task = document.getElementsByTagName("input")[0].value;
   let taskDiv = document.getElementById("tasks-container");
-
-  let input = document.createElement("input");
-  input.type = "checkbox";
-  input.id = "item" + idCounter;
-  input.className = "checkbox";
-  input.onclick = taskChecked;
 
   //Find importance number
   let priorityInput = document.getElementById("priority-selector").value;
@@ -198,58 +314,15 @@ function addTask() {
   ) {
     alert("You need to fill all the fields!");
   } else {
-    // create the div for displaying the priority
-    let divPriority = document.createElement("div");
-    divPriority.innerText = priorityInput;
-    divPriority.className = "todo-priority";
-    divPriority.classList.add(findPriority(priorityInput));
-
-    // create the div for displaying the text of the task
-    let divTaskText = document.createElement("div");
-    divTaskText.innerText = task;
-    divTaskText.className = "todo-text";
-
-    // create the div for displaying the date
-    let divDate = document.createElement("div");
     let date = calculateTime(new Date());
-    divDate.innerText = date;
-    divDate.className = "todo-created-at";
-
-    // create the task container div
-    let div = document.createElement("div");
-    div.className = "todo-container";
-
-    // create the remove button
-    let removeButton = document.createElement("button");
-    removeButton.className = "remove-button";
-    removeButton.innerText = "remove";
-    removeButton.addEventListener("click", (e) => {
-      if (input.checked) {
-        document.getElementById("tasks-done-container").removeChild(div);
-        doneItemsCount--;
-      } else {
-        taskDiv.removeChild(div);
-        todoItemsCount--;
-      }
-
-      counterUpdated();
-    });
-
-    //create the type div
-    let divType = document.createElement("div");
-    divType.id = "divType";
-    divType.className = typeInput;
-    divType.innerText = typeInput;
-    console.log(divType.className);
-
-    // add todo elements to the todo-container
-    div.appendChild(input);
-    div.appendChild(divPriority);
-    div.appendChild(divTaskText);
-    div.appendChild(divDate);
-    div.appendChild(divType);
-    getEditTaskButton(div, divTaskText);
-    div.appendChild(removeButton);
+    let taskObject = {
+      task,
+      priority: priorityInput,
+      date,
+      type: typeInput,
+      id: "todo" + idCounter,
+    };
+    let div = await createTaskDomElements(taskObject, false);
 
     // add the todo-container to the div task list
     taskDiv.appendChild(div);
@@ -261,71 +334,41 @@ function addTask() {
 
     // update counters
     idCounter++;
-    todoItemsCount++;
-
     counterUpdated();
 
     // save the task to jsonBin
-    let taskObject = {
-      task,
-      checked: false,
-      priority: priorityInput,
-      date,
-      type: typeInput,
-    };
-    saveTaskToJsonBin(taskObject, getCollectionId(false), (binId) => {
-      idMap[input.id] = binId;
-    });
-  }
 
-  //function to update items counter
-  function taskChecked(event) {
-    let div = event.target.parentNode;
-    let taskDiv = document.getElementById("tasks-container");
-    let taskDoneDiv = document.getElementById("tasks-done-container");
-    if (isHidden) {
-      div.classList.add("hidden");
-    }
-    if (!event.target.checked) {
-      taskDiv.appendChild(div);
-      todoItemsCount++;
-      doneItemsCount--;
-    } else {
-      taskDoneDiv.appendChild(div);
-      todoItemsCount--;
-      doneItemsCount++;
-
-      let localId = event.target.id;
-      let binId = idMap[localId];
-      deleteTaskFromJsonBin(binId, () => {
-        let taskObject = getTaskFromDivElement(div);
-
-        saveTaskToJsonBin(taskObject, getCollectionId(true), (binId) => {
-          idMap[localId] = binId;
-        });
-      });
-    }
-    counterUpdated();
+    appData.todo.push(taskObject);
+    await setPersistent(MY_BIN_ID, appData);
   }
 }
 
-function getTaskFromDivElement(divElement) {
-  let checked = divElement.getElementsByTagName("input")[0].innerText;
-  let taskText = divElement.getElementsByClassName("todo-text")[0].innerText;
-  let priority = divElement.getElementsByClassName("todo-priority")[0]
-    .innerText;
-  let date = divElement.getElementsByClassName("todo-created-at")[0].innerText;
-  let type = document.getElementById("divType").innerText;
+//function to update items counter
+function taskChecked(event) {
+  let div = event.target.parentNode;
+  let taskDiv = document.getElementById("tasks-container");
+  let taskDoneDiv = document.getElementById("tasks-done-container");
+  if (isHidden) {
+    div.classList.add("hidden");
+  }
 
-  let taskObject = {
-    task: taskText,
-    checked,
-    priority,
-    date,
-    type,
-  };
-  console.log(taskObject);
-  return taskObject;
+  let localId = event.target.id;
+  if (!event.target.checked) {
+    taskDiv.appendChild(div);
+
+    let taskObject = appData.done.find((x) => x.id == localId);
+    appData.done.splice(appData.done.indexOf(taskObject), 1);
+    appData.todo.push(taskObject);
+  } else {
+    taskDoneDiv.appendChild(div);
+
+    let taskObject = appData.todo.find((x) => x.id == localId);
+
+    appData.todo.splice(appData.todo.indexOf(taskObject), 1);
+    appData.done.push(taskObject);
+  }
+  setPersistent(MY_BIN_ID, appData);
+  counterUpdated();
 }
 
 //added style to the tasks
@@ -368,6 +411,7 @@ function calculateTime(time) {
   let string = day + "/" + month + "/" + year + " " + hours + ":" + minutes;
   return string;
 }
+
 //function to hide completed tasks
 document.getElementById("hide-list").addEventListener("click", (e) => {
   let array = document
@@ -392,75 +436,3 @@ document.getElementById("hide-list").addEventListener("click", (e) => {
     }
   }
 });
-
-function loadTasks() {
-  let req2 = new XMLHttpRequest();
-
-  req2.onreadystatechange = () => {
-    if (req2.readyState == XMLHttpRequest.DONE) {
-      console.log(req2.responseText);
-    }
-  };
-
-  let id = "601672210ba5ca5799d17cd2";
-  req2.open("GET", "https://api.jsonbin.io/v3/b/" + id + "/latest", true);
-  req2.setRequestHeader("X-Master-Key", JSONBIN_KEY);
-  req2.send();
-
-  let req = new XMLHttpRequest();
-
-  req.onreadystatechange = () => {
-    if (req.readyState == XMLHttpRequest.DONE) {
-      console.log(req.responseText);
-    }
-  };
-
-  // first - load the todo-tasks list
-  let collectionIdOfTodoTasks = getCollectionId(false);
-  req.open(
-    "GET",
-    "https://api.jsonbin.io/v3/c/" + collectionIdOfTodoTasks + "/bins/1",
-    true
-  );
-  req.setRequestHeader("X-Master-Key", JSONBIN_KEY);
-  req.send();
-}
-
-function getCollectionId(isDone) {
-  return isDone ? "6016697b0ba5ca5799d17a26" : "601669690ba5ca5799d17a1f";
-}
-
-function deleteTaskFromJsonBin(id, doAfter) {
-  let req = new XMLHttpRequest();
-
-  req.onreadystatechange = () => {
-    if (req.readyState == XMLHttpRequest.DONE) {
-      console.log(req.responseText);
-      if (doAfter) doAfter();
-    }
-  };
-
-  req.open("DELETE", "https://api.jsonbin.io/v3/b/" + id, true);
-  req.setRequestHeader("X-Master-Key", JSONBIN_KEY);
-  req.send();
-}
-
-function saveTaskToJsonBin(task, collectionId, callback) {
-  let jsonString = JSON.stringify(task);
-
-  let req = new XMLHttpRequest();
-  req.onreadystatechange = () => {
-    if (req.readyState == XMLHttpRequest.DONE) {
-      console.log(req.responseText);
-      let jsonObject = JSON.parse(req.responseText);
-      if (callback) {
-        callback(jsonObject.metadata.id);
-      }
-    }
-  };
-  req.open("POST", "https://api.jsonbin.io/v3/b", true);
-  req.setRequestHeader("Content-Type", "application/json");
-  req.setRequestHeader("X-COLLECTION-ID", collectionId);
-  req.setRequestHeader("X-Master-Key", JSONBIN_KEY);
-  req.send(jsonString);
-}
