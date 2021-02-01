@@ -1,5 +1,5 @@
 const API_KEY = "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS";
-const MY_BIN_ID = "6016cb6e0ba5ca5799d1a79e";
+const MY_BIN_ID = "60183cc6abdf9c556796446d";
 
 // Gets data from persistent storage by the given key and returns it
 async function getPersistent(key) {
@@ -11,7 +11,9 @@ async function getPersistent(key) {
   });
   //console.log(response);
   //console.log(response.body);
-  return (await response.json()).record;
+  const result = await response.json();
+  console.log(result.record);
+  return result.record;
 }
 
 // Saves the given data into persistent storage by the given key.
@@ -27,3 +29,6 @@ async function setPersistent(key, tasks) {
   });
   return true;
 }
+// 60183cc6abdf9c556796446d
+//6015914f13b20d48e8bf1b78
+//https://api.jsonbin.io/b/60183cc6abdf9c556796446d

@@ -4,15 +4,10 @@
   background-color: #121213;
 }
 .header {
-  background-image: url("./dark.jpeg");
-  background-position: center;
+  background-image: url(./dark.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
-  width: 1400px;
-  height: 260px;
-  margin-left: 130px;
-  margin-top: 50px;
-  margin-bottom: 100px;
+  height: 350px;
 }
 h3 {
   font-size: 40px;
@@ -246,18 +241,13 @@ form {
   background-color: darkblue;
   color: white;
 }
-.button {
-  padding: 0;
-  background: #ddd;
-  border-radius: 15px;
-  border: 1px solid gray;
-  font-size: 24px;
-  line-height: 24px;
-  color: #444;
-  display: block;
-  flex-direction: row;
+.main-paragraph {
+  font-size: 40px;
+  margin-top: 100px;
 }
-
+.second-paragraph {
+  font-size: 25px;
+}
 .img-list {
   height: 130px;
   margin: 0;
@@ -269,26 +259,11 @@ form {
 }
 
 .carousel {
-  width: 650px;
+  width: 100%;
   padding: 30px 0px;
   border: 3px solid black;
   border-radius: 20px;
-  background-color: beige;
-  margin-top: 150px;
-  margin-left: 500px;
-  overflow: hidden;
-}
-
-#right {
-  position: absolute;
-  z-index: 10;
-  transform: translateY(60px) translateX(670px);
-}
-
-#left {
-  position: absolute;
-  z-index: 10;
-  transform: translateY(-70px) translateX(-48px);
+  background-color: rgb(151, 150, 150);
 }
 .img-option {
   width: 130px;

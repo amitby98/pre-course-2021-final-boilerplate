@@ -4,15 +4,11 @@
   color: white;
 }
 .header {
-  background-image: url("./header.jpeg");
-  background-position: center;
+  background-image: url(./header.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
-  width: 1100px;
-  height: 260px;
-  margin-left: 280px;
-  margin-top: 50px;
-  margin-bottom: 100px;
+  width: 1300px;
+  height: 350px;
 }
 h3 {
   font-size: 40px;
@@ -258,19 +254,13 @@ form {
 .fa-instagram {
   background: #bb0000;
 }
-
-.button {
-  padding: 0;
-  background: #ddd;
-  border-radius: 15px;
-  border: 1px solid gray;
-  font-size: 24px;
-  line-height: 24px;
-  color: #444;
-  display: block;
-  flex-direction: row;
+.main-paragraph {
+  font-size: 40px;
+  margin-top: 100px;
 }
-
+.second-paragraph {
+  font-size: 25px;
+}
 .img-list {
   height: 130px;
   margin: 0;
@@ -282,26 +272,11 @@ form {
 }
 
 .carousel {
-  width: 650px;
+  width: 100%;
   padding: 30px 0px;
   border: 3px solid black;
   border-radius: 20px;
   background-color: beige;
-  margin-top: 150px;
-  margin-left: 500px;
-  overflow: hidden;
-}
-
-#right {
-  position: absolute;
-  z-index: 10;
-  transform: translateY(60px) translateX(670px);
-}
-
-#left {
-  position: absolute;
-  z-index: 10;
-  transform: translateY(-70px) translateX(-48px);
 }
 .img-option {
   width: 130px;
@@ -311,4 +286,9 @@ form {
 .img7 {
   border-radius: 50%;
   height: 40px;
+}
+.drop-image {
+  background-color: #3b5998;
+  height: 300px;
+  width: 300px;
 }

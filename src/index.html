@@ -65,7 +65,7 @@
       placeholder="Anything you wanna remember?"
       onmouseout="saveNote()"
     ></textarea>
-    <nav class="floating-menu">
+    <!-- <nav class="floating-menu">
       <h3>Get in touch!</h3>
       <link
         rel="stylesheet"
@@ -91,10 +91,14 @@
         target="_blank"
         class="fa fa-instagram"
       ></a>
-    </nav>
+    </nav> -->
+    <p class="main-paragraph">★ Style your list with the items below ★</p>
+    <p class="second-paragraph">
+      just drag and drop them whenever you want,<br />
+      You can return them to the box whenever you want!
+    </p>
     <div class="carousel">
       <button class="button" id="right">⇨</button>
-      <!-- <p>Style your list with the items below!</p> -->
       <div id="images" class="imgs">
         <ul class="img-list">
           <li>
@@ -186,15 +190,6 @@
               class="img-option"
               src="./oneThing.jpeg"
               id="image10"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./oneThing.jpeg"
-              id="image11"
             />
           </li>
         </ul>

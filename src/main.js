@@ -3,7 +3,7 @@ let darkButton = document.getElementById("dark-mode");
 let clearButton = document.getElementById("clear");
 idMap = {};
 appData = {
-  todo: [],
+  "my-todo": [],
   done: [],
   idCounter: 0,
   note: "",
@@ -13,6 +13,10 @@ appData = {
 async function loadTasks() {
   // first - get the data from the json.bin
   appData = await getPersistent(MY_BIN_ID);
+
+  console.log("data:");
+  console.log(appData);
+
   if (!appData.idCounter) {
     appData.idCounter = 0;
   }
@@ -20,13 +24,14 @@ async function loadTasks() {
   let taskDiv = document.getElementById("tasks-container");
   let taskDoneDiv = document.getElementById("tasks-done-container");
   // second - create the todo list
-  appData.todo.forEach(async (taskObject) => {
+  console.log(appData["my-todo"]);
+  appData["my-todo"].forEach(async (taskObject) => {
     let div = await createTaskDomElements(taskObject, false);
     taskDiv.appendChild(div);
   });
 
-  // third - create the done list
-  appData.done.forEach(async (taskObject) => {
+  // third- create the done list
+  appData?.done?.forEach(async (taskObject) => {
     let div = await createTaskDomElements(taskObject, true);
     taskDoneDiv.appendChild(div);
   });
@@ -46,7 +51,6 @@ async function loadTasks() {
       imageEle.style.left = appData.dragItems[imageId].left;
     }
   }
-
   counterUpdated();
 }
 
@@ -96,6 +100,7 @@ function startDrag(event) {
 //function that save the note
 async function saveNote() {
   appData.note = document.getElementById("comment").value;
+  document.getElementById("comment").value = appData.note;
 
   setPersistent(MY_BIN_ID, appData);
 }
@@ -119,7 +124,7 @@ async function createTaskDomElements(taskObject, isChecked) {
 
   // create the div for displaying the text of the task
   let divTaskText = document.createElement("div");
-  divTaskText.innerText = taskObject.task;
+  divTaskText.innerText = taskObject.text;
   divTaskText.className = "todo-text";
 
   // create the div for displaying the date
@@ -145,8 +150,8 @@ async function createTaskDomElements(taskObject, isChecked) {
     } else {
       document.getElementById("tasks-container").removeChild(div);
 
-      let taskObject = appData.todo.find((x) => x.id == localId);
-      appData.todo.splice(appData.todo.indexOf(taskObject), 1);
+      let taskObject = appData["my-todo"].find((x) => x.id == localId);
+      appData["my-todo"].splice(appData["my-todo"].indexOf(taskObject), 1);
     }
 
     setPersistent(MY_BIN_ID, appData);
@@ -196,7 +201,6 @@ filterButton.addEventListener("click", (e) => {
 //clear all button
 clearButton.addEventListener("click", (e) => {
   document.getElementById("counter-done").innerText = "0";
-  // document.getElementById("empty-list-done-span").style.display = "block";
   removeDone();
   setPersistent(MY_BIN_ID, appData);
 });
@@ -240,11 +244,11 @@ function sortByImportance(increase) {
         taskDiv.getElementsByTagName("div")[0].innerText
       );
       switch (priority) {
-        case 1:
+        case 5:
           priorityArray1.push(taskDiv);
           taskDiv.remove;
           break;
-        case 2:
+        case 4:
           priorityArray2.push(taskDiv);
           taskDiv.remove;
           break;
@@ -252,11 +256,11 @@ function sortByImportance(increase) {
           priorityArray3.push(taskDiv);
           taskDiv.remove;
           break;
-        case 4:
+        case 2:
           priorityArray4.push(taskDiv);
           taskDiv.remove;
           break;
-        case 5:
+        case 1:
           priorityArray5.push(taskDiv);
           taskDiv.remove;
           break;
@@ -354,12 +358,12 @@ function getEditTaskButton(todoDiv, textDiv) {
     console.log(e.target.parentNode.getElementsByTagName("input"));
     let taskId = e.target.parentNode.getElementsByTagName("input")[0].id;
     console.log("taskId:" + taskId);
-    let taskObject = appData.todo.find((task) => task.id == taskId);
+    let taskObject = appData["my-todo"].find((task) => task.id == taskId);
     if (taskObject) {
-      taskObject.task = newText;
+      taskObject.text = newText;
     } else {
       taskObject = appData.done.find((task) => task.id == taskId);
-      taskObject.task = newText;
+      taskObject.text = newText;
     }
     setPersistent(MY_BIN_ID, appData);
   });
@@ -367,22 +371,23 @@ function getEditTaskButton(todoDiv, textDiv) {
 
 //function for counter
 function counterUpdated() {
-  if (appData.todo.length >= 1) {
+  console.log(appData.done);
+  if (appData["my-todo"].length >= 1) {
     document.getElementById("empty-list-span").style.display = "none";
-  } else if (appData.todo.length === 0) {
+  } else if (appData["my-todo"].length === 0) {
     document.getElementById("empty-list-span").style.display = "block";
   }
-  if (appData.done.length >= 1) {
+  if (appData.done?.length >= 1) {
     document.getElementById("empty-list-done-span").style.display = "none";
-  } else if (appData.done.length === 0) {
+  } else if (appData.done?.length === 0) {
     document.getElementById("empty-list-done-span").style.display = "block";
   }
 
   //added counter to tasks left
-  document.getElementById("counter").innerText = appData.todo.length;
+  document.getElementById("counter").innerText = appData["my-todo"].length;
 
   //added counter to complete tasks
-  document.getElementById("counter-done").innerText = appData.done.length;
+  document.getElementById("counter-done").innerText = appData.done?.length;
 }
 
 //function to add tasks
@@ -403,11 +408,11 @@ async function addTask() {
   } else {
     let date = calculateTime(new Date());
     let taskObject = {
-      task,
+      text: task,
       priority: priorityInput,
       date,
       type: typeInput,
-      id: "todo" + appData.idCounter,
+      id: "my-todo" + appData.idCounter,
     };
     let div = await createTaskDomElements(taskObject, false);
 
@@ -415,12 +420,13 @@ async function addTask() {
     taskDiv.appendChild(div);
 
     // reset inputs after adding a task
-    document.getElementsByTagName("input")[0].value = "";
+    document.getElementById("text-input").value = "";
+    //document.getElementsByTagName("input")[0].value = "";
     document.getElementsByTagName("select")[0].value = "";
     document.getElementsByTagName("select")[1].value = "Normal";
 
     // save the task to jsonBin
-    appData.todo.push(taskObject);
+    appData["my-todo"].push(taskObject);
     await setPersistent(MY_BIN_ID, appData);
 
     // update counters
@@ -444,13 +450,13 @@ function taskChecked(event) {
 
     let taskObject = appData.done.find((x) => x.id == localId);
     appData.done.splice(appData.done.indexOf(taskObject), 1);
-    appData.todo.push(taskObject);
+    appData["my-todo"].push(taskObject);
   } else {
     taskDoneDiv.appendChild(div);
 
-    let taskObject = appData.todo.find((x) => x.id == localId);
+    let taskObject = appData["my-todo"].find((x) => x.id == localId);
 
-    appData.todo.splice(appData.todo.indexOf(taskObject), 1);
+    appData["my-todo"].splice(appData["my-todo"].indexOf(taskObject), 1);
     appData.done.push(taskObject);
   }
   setPersistent(MY_BIN_ID, appData);
