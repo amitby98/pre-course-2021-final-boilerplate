@@ -63,6 +63,7 @@
       cols="50"
       rows="13"
       placeholder="Anything you wanna remember?"
+      onmouseout="saveNote()"
     ></textarea>
     <nav class="floating-menu">
       <h3>Get in touch!</h3>
@@ -91,6 +92,115 @@
         class="fa fa-instagram"
       ></a>
     </nav>
+    <div class="carousel">
+      <button class="button" id="right">⇨</button>
+      <!-- <p>Style your list with the items below!</p> -->
+      <div id="images" class="imgs">
+        <ul class="img-list">
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./panic.jpeg"
+              id="image1"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./smallSteps.jpeg"
+              id="image2"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./pinkP.jpeg"
+              id="image3"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./makeToday.jpeg"
+              id="image4"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./rock.jpeg"
+              id="image5"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./bornTo.jpeg"
+              id="image6"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              class="img7"
+              src="./wow.jpeg"
+              id="image7"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./nirvana.jpeg"
+              id="image8"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./clock.jpeg"
+              id="image9"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./oneThing.jpeg"
+              id="image10"
+            />
+          </li>
+          <li>
+            <img
+              ondragstart="return false;"
+              onmousedown="startDrag(event)"
+              class="img-option"
+              src="./oneThing.jpeg"
+              id="image11"
+            />
+          </li>
+        </ul>
+      </div>
+      <button class="button" id="left">⇦</button>
+    </div>
     <script src="./main.js"></script>
   </body>
 </html>

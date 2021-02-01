@@ -1,4 +1,3 @@
-idCounter = 0;
 isHidden = false;
 let darkButton = document.getElementById("dark-mode");
 let clearButton = document.getElementById("clear");
@@ -6,12 +5,17 @@ idMap = {};
 appData = {
   todo: [],
   done: [],
+  idCounter: 0,
+  note: "",
 };
 
 // This function loads the data from the JSON.BIN and then create the DOM elements
 async function loadTasks() {
   // first - get the data from the json.bin
   appData = await getPersistent(MY_BIN_ID);
+  if (!appData.idCounter) {
+    appData.idCounter = 0;
+  }
 
   let taskDiv = document.getElementById("tasks-container");
   let taskDoneDiv = document.getElementById("tasks-done-container");
@@ -27,8 +31,73 @@ async function loadTasks() {
     taskDoneDiv.appendChild(div);
   });
 
-  idCounter = appData.done.length + appData.todo.length + 1;
+  // fourth - update note from json.bin to html dom
+  document.getElementById("comment").value = appData.note;
+
+  // fifth - update the drag items location
+  if (appData.dragItems) {
+    for (let imageId in appData.dragItems) {
+      let imageEle = document.getElementById(imageId);
+      document.body.append(imageEle);
+      imageEle.style.position = "absolute";
+      imageEle.style.zIndex = 1000;
+      imageEle.style.top = appData.dragItems[imageId].top;
+      console.log(appData.dragItems[imageId].top);
+      imageEle.style.left = appData.dragItems[imageId].left;
+    }
+  }
+
   counterUpdated();
+}
+
+//drag and drop settings
+function startDrag(event) {
+  dragImage = event.target;
+  let shiftX = event.clientX - dragImage.getBoundingClientRect().left;
+  let shiftY = event.clientY - dragImage.getBoundingClientRect().top;
+
+  dragImage.style.position = "absolute";
+  dragImage.style.zIndex = 1000;
+  document.body.append(dragImage);
+
+  moveAt(event.pageX, event.pageY);
+
+  // moves the image at (pageX, pageY) coordinates
+  // taking initial shifts into account
+  function moveAt(pageX, pageY) {
+    dragImage.style.left = pageX - shiftX + "px";
+    dragImage.style.top = pageY - shiftY + "px";
+  }
+
+  function onMouseMove(event) {
+    moveAt(event.pageX, event.pageY);
+  }
+
+  // move the image on mousemove
+  document.addEventListener("mousemove", onMouseMove);
+
+  // drop the image, remove unneeded handlers
+  dragImage.onmouseup = function () {
+    console.log("hi");
+    document.removeEventListener("mousemove", onMouseMove);
+    dragImage.onmouseup = null;
+
+    if (!appData.dragItems) appData.dragItems = {};
+
+    appData.dragItems[dragImage.id] = {
+      left: dragImage.style.left,
+      top: dragImage.style.top,
+    };
+    console.log(appData.dragItems[dragImage.id]);
+    setPersistent(MY_BIN_ID, appData);
+  };
+}
+
+//function that save the note
+async function saveNote() {
+  appData.note = document.getElementById("comment").value;
+
+  setPersistent(MY_BIN_ID, appData);
 }
 
 // this function gets a task object and create a div with all the elements of the task inside
@@ -129,6 +198,7 @@ clearButton.addEventListener("click", (e) => {
   document.getElementById("counter-done").innerText = "0";
   // document.getElementById("empty-list-done-span").style.display = "block";
   removeDone();
+  setPersistent(MY_BIN_ID, appData);
 });
 
 //function to reset all the completed tasks
@@ -140,6 +210,7 @@ function removeDone() {
     i--;
     task.remove();
   }
+  appData.done = [];
 }
 
 //dark mode button
@@ -279,6 +350,18 @@ function getEditTaskButton(todoDiv, textDiv) {
     } else {
       alert("New task is too short!");
     }
+    console.log(e.target.parentNode);
+    console.log(e.target.parentNode.getElementsByTagName("input"));
+    let taskId = e.target.parentNode.getElementsByTagName("input")[0].id;
+    console.log("taskId:" + taskId);
+    let taskObject = appData.todo.find((task) => task.id == taskId);
+    if (taskObject) {
+      taskObject.task = newText;
+    } else {
+      taskObject = appData.done.find((task) => task.id == taskId);
+      taskObject.task = newText;
+    }
+    setPersistent(MY_BIN_ID, appData);
   });
 }
 
@@ -324,7 +407,7 @@ async function addTask() {
       priority: priorityInput,
       date,
       type: typeInput,
-      id: "todo" + idCounter,
+      id: "todo" + appData.idCounter,
     };
     let div = await createTaskDomElements(taskObject, false);
 
@@ -341,7 +424,7 @@ async function addTask() {
     await setPersistent(MY_BIN_ID, appData);
 
     // update counters
-    idCounter++;
+    appData.idCounter++;
     counterUpdated();
   }
 }
@@ -438,4 +521,29 @@ document.getElementById("hide-list").addEventListener("click", (e) => {
       }
     }
   }
+});
+
+//carousel settings
+let transX = 0;
+const increment = 400;
+let buttonRight = document.getElementById("right");
+let buttonLeft = document.getElementById("left");
+let imgs = document.getElementById("images");
+imgs.style.transform = "translateX(-25px)";
+let allImg = document.querySelectorAll("img");
+
+buttonRight.addEventListener("click", (e) => {
+  transX = transX - increment;
+  if (!(transX >= -1200)) {
+    transX = -1200;
+  }
+  imgs.style.transform = "translateX(" + transX + "px)";
+});
+
+buttonLeft.addEventListener("click", (e) => {
+  transX = transX + increment;
+  if (!(transX <= -25)) {
+    transX = -25;
+  }
+  imgs.style.transform = "translateX(" + transX + "px)";
 });
