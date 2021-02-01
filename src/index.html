@@ -36,30 +36,32 @@
     <div id="buttons">
       <button id="sort-button" class="buttons">Sort By:</button>
       <button id="dark-mode" class="buttons">Dark Mode</button>
-      <!-- <button id="clear" class="buttons">Clear</button> -->
     </div>
     <div class="to-do-header">
       <section class="header-uncompleted">
         <h3><span id="counter"></span> Uncompleted :</h3>
         <div id="tasks-container" class="tasks">
-          <span id="empty-list-span">Your task list is empty :)</span>
+          <span id="empty-list-span"
+            >You're not going to do anything today? 🧐😕
+          </span>
         </div>
       </section>
       <section class="header-completed">
         <h3 id="hide-list"><span id="counter-done"></span> Completed :</h3>
         <div id="tasks-done-container" class="tasks">
           <span id="empty-list-done-span"
-            >You didn't finish any task today :(</span
+            >Stop being lazy! Finish a task 😎😎</span
           >
         </div>
+        <button id="clear" class="buttons">Clear All</button>
       </section>
     </div>
     <label for="notes" class="labelComments"> Notes :</label><br /><br />
     <textarea
       class="notes"
       id="comment"
-      cols="45"
-      rows="7"
+      cols="50"
+      rows="13"
       placeholder="Anything you wanna remember?"
     ></textarea>
     <script src="./main.js"></script>

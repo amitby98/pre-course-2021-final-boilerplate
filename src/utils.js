@@ -1,4 +1,4 @@
-const API_KEY = "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS"; // Assign this variable to your JSONBIN.io API key if you choose to use it.
+const API_KEY = "$2b$10$ACsxVNXnozYAgSXjbvpoK.htaNg4CTPxW4wawEI7zBnGpC6KA/AHS";
 const MY_BIN_ID = "6016cb6e0ba5ca5799d1a79e";
 
 // Gets data from persistent storage by the given key and returns it

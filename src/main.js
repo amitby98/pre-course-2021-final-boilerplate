@@ -1,7 +1,7 @@
 idCounter = 0;
 isHidden = false;
 let darkButton = document.getElementById("dark-mode");
-// let clearButton = document.getElementById("clear");
+let clearButton = document.getElementById("clear");
 idMap = {};
 appData = {
   todo: [],
@@ -65,7 +65,7 @@ async function createTaskDomElements(taskObject, isChecked) {
   // create the remove button
   let removeButton = document.createElement("button");
   removeButton.className = "remove-button";
-  removeButton.innerText = "remove";
+  removeButton.innerText = "❌";
   removeButton.addEventListener("click", (e) => {
     let localId = input.id;
     if (input.checked) {
@@ -124,20 +124,22 @@ filterButton.addEventListener("click", (e) => {
   }
 });
 
-// //clear the completed list
-// clearButton.addEventListener("click", (e) => {
-//   document.getElementById("counter-done").innerText = "0";
-//   removeDone();
-// });
+//clear the completed list
+clearButton.addEventListener("click", (e) => {
+  document.getElementById("counter-done").innerText = "0";
+  removeDone();
+});
 
-// function removeDone() {
-//   let taskDoneDiv = document.getElementById("tasks-done-container");
-//   let array = taskDoneDiv.getElementsByClassName("todo-container");
-//   for (let i = 0; i < array.length; i++) {
-//     let task = array[i];
-//     task.remove();
-//   }
-// }
+//function to reset all the completed tasks
+function removeDone() {
+  let taskDoneDiv = document.getElementById("tasks-done-container");
+  let array = taskDoneDiv.getElementsByClassName("todo-container");
+  for (let i = 0; i < array.length; i++) {
+    let task = array[i];
+    i--;
+    task.remove();
+  }
+}
 
 //dark mode button
 darkButton.addEventListener("click", (e) => {
@@ -262,7 +264,8 @@ function sortByType(increase) {
 //function for edit button
 function getEditTaskButton(todoDiv, textDiv) {
   let editButton = document.createElement("button");
-  editButton.innerText = "Edit";
+  editButton.className = "edit-button";
+  editButton.innerText = "✏️";
   todoDiv.appendChild(editButton);
   editButton.addEventListener("click", (e) => {
     let newText = window.prompt("Type your changes.");
@@ -337,7 +340,6 @@ async function addTask() {
     counterUpdated();
 
     // save the task to jsonBin
-
     appData.todo.push(taskObject);
     await setPersistent(MY_BIN_ID, appData);
   }

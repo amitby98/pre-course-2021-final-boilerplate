@@ -1,10 +1,10 @@
 :root {
   text-align: center;
   color: white;
-  background-color: black;
+  background-color: #121213;
 }
 .header {
-  background-image: url("./darkheader.jpeg");
+  background-image: url("./dark.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -23,6 +23,7 @@ h3 {
   flex-direction: row;
   justify-content: center;
   margin-top: 15px;
+  margin-bottom: 100px;
 }
 .header-uncompleted {
   border: 5px solid;
@@ -32,7 +33,7 @@ h3 {
   padding-right: 50px;
   padding-bottom: 20px;
   font-size: 25px;
-  background-color: skyblue;
+  background-color: rgb(19, 42, 19);
 }
 .header-completed {
   border: 5px solid;
@@ -42,77 +43,95 @@ h3 {
   padding-right: 50px;
   padding-bottom: 20px;
   font-size: 25px;
+  background-color: rgb(19, 42, 19);
 }
 .todo-priority {
-  padding-right: 10px;
-  padding-left: 20px;
+  padding-right: 2px;
+  padding-left: 2px;
 }
 .todo-text {
-  padding-right: 10px;
+  padding-right: 12px;
 }
 .todo-created-at {
-  padding-right: 20px;
+  padding-right: 8px;
 }
 .todo-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 8px;
+  border-top: 5px solid;
+  padding: 30px 0px;
+  justify-content: space-around;
 }
 .very-low {
   background-color: blue;
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .low {
-  background-color: white;
+  background-color: tomato;
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .normal {
   background-color: rgb(179, 144, 79);
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .high {
   background-color: rgb(214, 199, 148);
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .very-high {
   background-color: rgb(156, 75, 75);
+  height: 30px;
+  margin: 0px 15px;
 }
 form {
   font-size: 23px;
 }
 .formStyle {
-  background-color: skyblue;
+  background-color: rgb(65, 109, 126);
   border: 0;
-  outline: 2px solid transparent;
+  outline: 4px solid transparent;
   font-size: var(--font-size);
-  padding: 0.5em 1em;
-  height: var(--height);
+  padding: 20px 50px;
   transition: outline 150ms linear;
   color: white;
+  border-radius: 5px;
+  margin-top: 30px;
+  margin-bottom: 60px;
+  box-sizing: border-box;
 }
 
 .formStyle:hover,
 .formStyle:focus {
-  outline-color: yellow;
+  outline-color: rgb(192, 188, 223);
 }
 
 #buttons {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 300px;
+  margin-left: 500px;
 }
 
 .buttons {
-  width: 150px;
-  height: 50px;
+  width: 170px;
+  height: 70px;
   color: white;
-  font-size: 20px;
+  font-size: 22px;
   margin-top: 20px;
   border: 2px solid transparent;
   border-radius: 10px;
   outline: none;
+  margin-bottom: 20px;
 }
 .buttons {
   background: linear-gradient(
@@ -142,14 +161,14 @@ form {
 }
 
 .labelComments {
-  font-size: 30px;
+  font-size: 40px;
   font-family: inherit;
 }
 .notes {
-  font-size: 20px;
+  font-size: 25px;
   font-family: inherit;
   border: 10px solid;
-  border-color: aqua;
+  border-color: darkblue;
 }
 #comment {
   background-image: url("./notes.jpeg");
@@ -158,9 +177,38 @@ form {
   background-size: cover;
 }
 #hide-list:hover {
-  color: aquamarine;
+  color: rgb(83, 83, 83);
+  background-color: white;
 }
-#item0 {
-  height: 30px;
-  width: 30px;
+.checkbox {
+  height: 25px;
+  width: 25px;
+  margin-right: 10px;
+}
+.checkbox:hover {
+  opacity: 0.8;
+  transform: scale(1.5);
+  transition: transform 2s;
+}
+.checkbox:checked {
+  opacity: 0.8;
+  transform: scale(2.2);
+}
+.remove-button {
+  font-size: 20px;
+  margin-left: 15px;
+}
+.edit-button {
+  font-size: 20px;
+  margin-left: 20px;
+}
+.remove-button:hover {
+  opacity: 0.8;
+  transform: scale(1.5);
+  transition: transform 2s;
+}
+.edit-button:hover {
+  opacity: 0.8;
+  transform: scale(1.5);
+  transition: transform 2s;
 }

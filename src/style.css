@@ -23,6 +23,7 @@ h3 {
   flex-direction: row;
   justify-content: center;
   margin-top: 15px;
+  margin-bottom: 100px;
 }
 .header-uncompleted {
   border: 5px solid;
@@ -32,7 +33,7 @@ h3 {
   padding-right: 50px;
   padding-bottom: 20px;
   font-size: 25px;
-  background-color: skyblue;
+  background-color: rgb(199, 199, 165);
 }
 .header-completed {
   border: 5px solid;
@@ -42,78 +43,93 @@ h3 {
   padding-right: 50px;
   padding-bottom: 20px;
   font-size: 25px;
+  background-color: rgb(199, 199, 165);
 }
 .todo-priority {
-  padding-right: 10px;
-  padding-left: 20px;
+  padding-right: 2px;
+  padding-left: 2px;
 }
 .todo-text {
-  padding-right: 10px;
+  padding-right: 12px;
 }
 .todo-created-at {
-  padding-right: 20px;
+  padding-right: 8px;
 }
 .todo-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 8px;
+  border-top: 5px solid;
+  padding: 30px 0px;
+  justify-content: space-around;
 }
 .very-low {
-  background-color: blue;
+  background-color: rgb(246, 159, 159);
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .low {
-  background-color: gray;
+  background-color: rgb(177, 159, 159);
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .normal {
-  background-color: rgb(179, 144, 79);
+  background-color: rgb(168, 120, 120);
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .high {
-  background-color: rgb(214, 199, 148);
+  background-color: rgb(131, 93, 93);
+  height: 30px;
+  margin: 0px 15px;
 }
 
 .very-high {
-  background-color: rgb(156, 75, 75);
+  background-color: rgb(85, 38, 38);
+  height: 30px;
+  margin: 0px 15px;
 }
 form {
   font-size: 23px;
 }
 .formStyle {
-  background-color: black;
+  background-color: rgb(85, 76, 76);
   border: 0;
-  outline: 2px solid transparent;
+  outline: 4px solid transparent;
   font-size: var(--font-size);
-  padding: 0.5em 1em;
-  height: var(--height);
+  padding: 20px 50px;
   transition: outline 150ms linear;
+  border-radius: 5px;
   color: white;
+  margin-top: 30px;
+  margin-bottom: 60px;
 }
 
 .formStyle:hover,
 .formStyle:focus {
-  outline-color: yellow;
+  outline-color: whitesmoke;
 }
 
 #buttons {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 300px;
+  margin-left: 500px;
 }
-
 .buttons {
-  background-color: black;
-  width: 150px;
-  height: 50px;
+  width: 170px;
+  height: 70px;
   color: white;
-  font-size: 20px;
+  font-size: 22px;
   margin-top: 20px;
   border: 2px solid transparent;
   border-radius: 10px;
   outline: none;
+  margin-bottom: 20px;
 }
 .buttons {
   background: linear-gradient(
@@ -143,14 +159,14 @@ form {
 }
 
 .labelComments {
-  font-size: 30px;
+  font-size: 40px;
   font-family: inherit;
 }
 .notes {
-  font-size: 20px;
+  font-size: 25px;
   font-family: inherit;
   border: 10px solid;
-  border-color: aqua;
+  border-color: rgb(75, 53, 25);
 }
 #comment {
   background-image: url("./notes.jpeg");
@@ -159,9 +175,38 @@ form {
   background-size: cover;
 }
 #hide-list:hover {
-  color: aquamarine;
+  color: black;
+  background-color: white;
 }
-#item0 {
-  height: 30px;
-  width: 30px;
+.checkbox {
+  height: 25px;
+  width: 25px;
+  margin-right: 10px;
+}
+.checkbox:hover {
+  opacity: 0.8;
+  transform: scale(1.5);
+  transition: transform 2s;
+}
+.checkbox:checked {
+  opacity: 0.8;
+  transform: scale(2.2);
+}
+.remove-button {
+  font-size: 20px;
+  margin-left: 15px;
+}
+.edit-button {
+  font-size: 20px;
+  margin-left: 20px;
+}
+.remove-button:hover {
+  opacity: 0.8;
+  transform: scale(1.5);
+  transition: transform 2s;
+}
+.edit-button:hover {
+  opacity: 0.8;
+  transform: scale(1.5);
+  transition: transform 2s;
 }
