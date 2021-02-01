@@ -124,9 +124,10 @@ filterButton.addEventListener("click", (e) => {
   }
 });
 
-//clear the completed list
+//clear all button
 clearButton.addEventListener("click", (e) => {
   document.getElementById("counter-done").innerText = "0";
+  // document.getElementById("empty-list-done-span").style.display = "block";
   removeDone();
 });
 
@@ -335,13 +336,13 @@ async function addTask() {
     document.getElementsByTagName("select")[0].value = "";
     document.getElementsByTagName("select")[1].value = "Normal";
 
-    // update counters
-    idCounter++;
-    counterUpdated();
-
     // save the task to jsonBin
     appData.todo.push(taskObject);
     await setPersistent(MY_BIN_ID, appData);
+
+    // update counters
+    idCounter++;
+    counterUpdated();
   }
 }
 

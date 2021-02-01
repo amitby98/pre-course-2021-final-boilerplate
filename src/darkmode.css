@@ -212,3 +212,37 @@ form {
   transform: scale(1.5);
   transition: transform 2s;
 }
+.floating-menu {
+  font-family: monospace;
+  background: black;
+  padding: 5px;
+  padding-right: 13px;
+  width: 80px;
+  z-index: 100;
+  position: fixed;
+  bottom: 270px;
+  right: 0px;
+}
+
+.floating-menu h3 {
+  font-size: 20px;
+  margin: 15px;
+  color: white;
+}
+.floating-menu a {
+  width: 40px;
+  height: 25px;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 40px;
+  margin-bottom: 20px;
+  margin-left: 15px;
+  font-size: 25px;
+  display: block;
+  color: black;
+  background-color: white;
+}
+.floating-menu a:hover {
+  background-color: darkblue;
+  color: white;
+}
