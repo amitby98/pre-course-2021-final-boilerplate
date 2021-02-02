@@ -1,4 +1,4 @@
-#My Todo List - About:
+# My Todo List - About:
 
 Hi there! This repo contains my todo list project.
 
@@ -14,7 +14,7 @@ you can also style your todo list with the items bar at the bottom of the page ð
 
 [You can see my project here!](https://amitby98.github.io/pre-course-2021-final-boilerplate/src/index.html)
 
-#How To Use?
+# How To Use?
 
 1. type inside the input your task
 2. choose the importance of your task - 1(low) to 5(high)
@@ -24,7 +24,7 @@ you can also style your todo list with the items bar at the bottom of the page ð
 6. the task moved to the completed list
 7. Good job! now go to finish another task! ðŸ˜Š
 
-#Buttons - About:
+# Buttons - About:
 
 **Sort Button** - you can sort your tasks by three ways:
 
@@ -38,7 +38,7 @@ you can also style your todo list with the items bar at the bottom of the page ð
 
 **Clear All** - this button will clear all your completed tasks
 
-#Things You Need To Know:
+# Things You Need To Know:
 
 **Save** - the app saves your tasks, notes and your style automatically
 
@@ -50,7 +50,7 @@ you can also style your todo list with the items bar at the bottom of the page ð
 
 **Items Bar** - choose items and start to style your app! just drag and drop them ðŸ˜Ž
 
-#My Resources:
+# My Resources:
 
 1. [Web Dev Simplified](https://www.youtube.com/c/WebDevSimplified)
 2. [W3School](https://www.w3schools.com/)
