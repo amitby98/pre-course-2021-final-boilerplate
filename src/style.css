@@ -125,6 +125,10 @@ form {
   outline: none;
   margin-bottom: 20px;
 }
+.buttons:active {
+  box-shadow: 0 5px rgb(80, 80, 45);
+  transform: translateY(4px);
+}
 .buttons {
   background: linear-gradient(
     -45deg,
@@ -189,6 +193,8 @@ form {
 .remove-button {
   font-size: 20px;
   margin-left: 15px;
+  /* animation-name: leave;
+  animation-duration: 2s; */
 }
 .edit-button {
   font-size: 20px;
