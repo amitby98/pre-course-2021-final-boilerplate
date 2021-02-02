@@ -4,7 +4,7 @@
   color: white;
 }
 .header {
-  background-image: url(./header.jpeg);
+  background-image: url(./pics/header.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
   height: 350px;
@@ -204,7 +204,6 @@ form {
   transform: scale(1.5);
   transition: transform 2s;
 }
-
 .floating-menu {
   font-family: monospace;
   background: rgb(209, 189, 151);
@@ -296,19 +295,12 @@ form {
   font-size: 20px;
   border-radius: 10px;
 }
-.serach {
-  margin-right: 400px;
-  margin-top: 30px;
-}
 .second-part {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  justify-content: space-around;
 }
 .highlight {
   background-color: rgb(100, 92, 92);
-}
-#search-button {
-  transition-duration: 3s;
-  cursor: grab;
 }
