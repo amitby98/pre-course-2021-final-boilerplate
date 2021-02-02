@@ -12,7 +12,6 @@ async function getPersistent(key) {
   //console.log(response);
   //console.log(response.body);
   const result = await response.json();
-  console.log(result.record);
   return result.record;
 }
 
@@ -29,6 +28,3 @@ async function setPersistent(key, tasks) {
   });
   return true;
 }
-// 60183cc6abdf9c556796446d
-//6015914f13b20d48e8bf1b78
-//https://api.jsonbin.io/b/60183cc6abdf9c556796446d

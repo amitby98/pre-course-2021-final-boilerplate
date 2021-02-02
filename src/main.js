@@ -14,9 +14,6 @@ async function loadTasks() {
   // first - get the data from the json.bin
   appData = await getPersistent(MY_BIN_ID);
 
-  console.log("data:");
-  console.log(appData);
-
   if (!appData.idCounter) {
     appData.idCounter = 0;
   }
@@ -24,7 +21,6 @@ async function loadTasks() {
   let taskDiv = document.getElementById("tasks-container");
   let taskDoneDiv = document.getElementById("tasks-done-container");
   // second - create the todo list
-  console.log(appData["my-todo"]);
   appData["my-todo"].forEach(async (taskObject) => {
     let div = await createTaskDomElements(taskObject, false);
     taskDiv.appendChild(div);
@@ -47,7 +43,6 @@ async function loadTasks() {
       imageEle.style.position = "absolute";
       imageEle.style.zIndex = 1000;
       imageEle.style.top = appData.dragItems[imageId].top;
-      console.log(appData.dragItems[imageId].top);
       imageEle.style.left = appData.dragItems[imageId].left;
     }
   }
@@ -82,7 +77,6 @@ function startDrag(event) {
 
   // drop the image, remove unneeded handlers
   dragImage.onmouseup = function () {
-    console.log("hi");
     document.removeEventListener("mousemove", onMouseMove);
     dragImage.onmouseup = null;
 
@@ -92,7 +86,6 @@ function startDrag(event) {
       left: dragImage.style.left,
       top: dragImage.style.top,
     };
-    console.log(appData.dragItems[dragImage.id]);
     setPersistent(MY_BIN_ID, appData);
   };
 }
@@ -354,10 +347,7 @@ function getEditTaskButton(todoDiv, textDiv) {
     } else {
       alert("New task is too short!");
     }
-    console.log(e.target.parentNode);
-    console.log(e.target.parentNode.getElementsByTagName("input"));
     let taskId = e.target.parentNode.getElementsByTagName("input")[0].id;
-    console.log("taskId:" + taskId);
     let taskObject = appData["my-todo"].find((task) => task.id == taskId);
     if (taskObject) {
       taskObject.text = newText;
@@ -371,7 +361,6 @@ function getEditTaskButton(todoDiv, textDiv) {
 
 //function for counter
 function counterUpdated() {
-  console.log(appData.done);
   if (appData["my-todo"].length >= 1) {
     document.getElementById("empty-list-span").style.display = "none";
   } else if (appData["my-todo"].length === 0) {
@@ -529,27 +518,59 @@ document.getElementById("hide-list").addEventListener("click", (e) => {
   }
 });
 
-//carousel settings
-let transX = 0;
-const increment = 400;
-let buttonRight = document.getElementById("right");
-let buttonLeft = document.getElementById("left");
-let imgs = document.getElementById("images");
-imgs.style.transform = "translateX(-25px)";
-let allImg = document.querySelectorAll("img");
+//search button setting
+document.addEventListener("click", searchTask);
+//function to search text in a task
+function searchTask(event) {
+  const target = event.target;
+  if (target.id !== "search-button") return;
 
-buttonRight.addEventListener("click", (e) => {
-  transX = transX - increment;
-  if (!(transX >= -1200)) {
-    transX = -1200;
-  }
-  imgs.style.transform = "translateX(" + transX + "px)";
-});
+  const searchInput = document.querySelector("#search-input");
+  highlight(searchInput.value.toLowerCase());
 
-buttonLeft.addEventListener("click", (e) => {
-  transX = transX + increment;
-  if (!(transX <= -25)) {
-    transX = -25;
+  searchInput.value = "";
+  searchInput.focus();
+}
+
+// //function to highlight the word search
+function highlight(text) {
+  const taskTexts = document.querySelectorAll(".todo-text");
+
+  for (let taskText of taskTexts) {
+    const taskInnerHTML = taskText.textContent;
+
+    if (text === "") {
+      taskText.innerHTML = taskText.textContent;
+      continue;
+    }
+
+    //get all the cases of a search text in a task
+    let textIndexes = [];
+    let index = taskInnerHTML.indexOf(text, 0);
+
+    while (index >= 0) {
+      textIndexes.push(index);
+      index = taskInnerHTML.indexOf(text, index + 1);
+    }
+
+    const numberOfCases = textIndexes.length;
+
+    if (numberOfCases === 0) {
+      taskText.innerHTML = taskText.textContent;
+      continue;
+    }
+
+    let newInnerHTML = `${taskInnerHTML.substring(0, textIndexes[0])}`;
+
+    for (let i = 0; i < numberOfCases; i++) {
+      newInnerHTML =
+        newInnerHTML +
+        `<span class='highlight'>${text}</span>${taskInnerHTML.substring(
+          textIndexes[i] + text.length,
+          textIndexes[i + 1]
+        )}`;
+    }
+
+    taskText.innerHTML = newInnerHTML;
   }
-  imgs.style.transform = "translateX(" + transX + "px)";
-});
+}

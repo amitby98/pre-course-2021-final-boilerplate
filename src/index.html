@@ -31,12 +31,21 @@
       </select>
       <button id="add-button" class="formStyle" onclick="addTask()">Add</button>
     </form>
-    <!-- <input type="text" id="search-input" placeholder="Search a task..." />
-    <button id="search-button">search</button> -->
-    <div id="buttons">
-      <button id="sort-button" class="buttons">Sort By:</button>
-      <button id="dark-mode" class="buttons">Dark Mode</button>
-    </div>
+    <section class="second-part">
+      <div class="serach">
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Search a task..."
+        />
+        <button id="search-button" class="buttons">Search 🔎</button>
+      </div>
+      <div id="buttons">
+        <button id="sort-button" class="buttons">Sort By:</button>
+        <button id="dark-mode" class="buttons">Dark Mode</button>
+      </div>
+    </section>
     <div class="to-do-header">
       <section class="header-uncompleted">
         <h3><span id="counter"></span> Uncompleted :</h3>
@@ -53,7 +62,7 @@
             >Stop being lazy! Finish a task 😎😎</span
           >
         </div>
-        <button id="clear" class="buttons">Clear All</button>
+        <button id="clear" class="buttons">Clear All ⌦</button>
       </section>
     </div>
     <label for="notes" class="labelComments"> Notes :</label><br /><br />
@@ -65,7 +74,7 @@
       placeholder="Anything you wanna remember?"
       onmouseout="saveNote()"
     ></textarea>
-    <!-- <nav class="floating-menu">
+    <nav class="floating-menu">
       <h3>Get in touch!</h3>
       <link
         rel="stylesheet"
@@ -91,14 +100,14 @@
         target="_blank"
         class="fa fa-instagram"
       ></a>
-    </nav> -->
+    </nav>
     <p class="main-paragraph">★ Style your list with the items below ★</p>
     <p class="second-paragraph">
       just drag and drop them whenever you want,<br />
       You can return them to the box whenever you want!
     </p>
     <div class="carousel">
-      <button class="button" id="right">⇨</button>
+      <!-- <button class="button" id="right">⇨</button> -->
       <div id="images" class="imgs">
         <ul class="img-list">
           <li>
@@ -194,7 +203,7 @@
           </li>
         </ul>
       </div>
-      <button class="button" id="left">⇦</button>
+      <!-- <button class="button" id="left">⇦</button> -->
     </div>
     <script src="./main.js"></script>
   </body>

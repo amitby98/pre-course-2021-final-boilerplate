@@ -7,7 +7,6 @@
   background-image: url(./header.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
-  width: 1300px;
   height: 350px;
 }
 h3 {
@@ -114,7 +113,6 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 500px;
 }
 .buttons {
   width: 170px;
@@ -171,7 +169,7 @@ form {
   background-size: cover;
 }
 #hide-list:hover {
-  color: black;
+  color: rgb(85, 38, 38);
   background-color: white;
 }
 .checkbox {
@@ -209,7 +207,7 @@ form {
 
 .floating-menu {
   font-family: monospace;
-  background: rgb(80, 44, 44);
+  background: rgb(209, 189, 151);
   padding: 5px;
   padding-right: 13px;
   width: 80px;
@@ -291,4 +289,26 @@ form {
   background-color: #3b5998;
   height: 300px;
   width: 300px;
+}
+.search-input {
+  height: 50px;
+  width: 100%;
+  font-size: 20px;
+  border-radius: 10px;
+}
+.serach {
+  margin-right: 400px;
+  margin-top: 30px;
+}
+.second-part {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.highlight {
+  background-color: rgb(100, 92, 92);
+}
+#search-button {
+  transition-duration: 3s;
+  cursor: grab;
 }
