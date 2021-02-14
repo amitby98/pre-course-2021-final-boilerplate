@@ -410,7 +410,6 @@ async function addTask() {
 
     // reset inputs after adding a task
     document.getElementById("text-input").value = "";
-    //document.getElementsByTagName("input")[0].value = "";
     document.getElementsByTagName("select")[0].value = "";
     document.getElementsByTagName("select")[1].value = "Normal";
 
@@ -550,7 +549,7 @@ function highlight(text) {
 
     while (index >= 0) {
       textIndexes.push(index);
-      index = taskInnerHTML.indexOf(text, index + 1);
+      index = taskInnerHTML.indexOf(text, index + text.length);
     }
 
     const numberOfCases = textIndexes.length;
@@ -561,7 +560,6 @@ function highlight(text) {
     }
 
     let newInnerHTML = `${taskInnerHTML.substring(0, textIndexes[0])}`;
-
     for (let i = 0; i < numberOfCases; i++) {
       newInnerHTML =
         newInnerHTML +
