@@ -1,8 +1,8 @@
-isHidden = false;
+let isHidden = false;
 let darkButton = document.getElementById("dark-mode");
 let clearButton = document.getElementById("clear");
-idMap = {};
-appData = {
+let idMap = {};
+let appData = {
   "my-todo": [],
   done: [],
   idCounter: 0,
@@ -215,8 +215,10 @@ darkButton.addEventListener("click", (e) => {
   let theme = document.getElementById("theme");
   if (theme.href.includes("style")) {
     theme.href = "darkmode.css";
+    darkButton.innerText = "Bright mode";
   } else {
     document.getElementById("theme").href = "style.css";
+    darkButton.innerText = "Dark mode";
   }
 });
 
