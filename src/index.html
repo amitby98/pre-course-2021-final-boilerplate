@@ -7,203 +7,209 @@
     <link id="theme" rel="stylesheet" href="./style.css" />
     <script src="./utils.js"></script>
   </head>
+
   <body onload="loadTasks()">
-    <h1 class="header"></h1>
-    <form onsubmit="return false">
-      <input
-        class="formStyle"
-        id="text-input"
-        type="text"
-        placeholder="What's your goal today?"
-      />
-      <select id="priority-selector" class="formStyle">
-        <option disabled selected value>Importance</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <select id="priority-selector2" class="formStyle">
-        <option value="Normal">Normal task (default)</option>
-        <option value="Must">Must Do Today</option>
-        <option value="Quickly">10 min "Just Do It"</option>
-      </select>
-      <button id="add-button" class="formStyle" onclick="addTask()">Add</button>
-    </form>
-    <section class="second-part">
-      <div>
+    <div id="spinner" class="loader"></div>
+    <div id="content">
+      <h1 class="header"></h1>
+      <form onsubmit="return false">
         <input
+          class="formStyle"
+          id="text-input"
           type="text"
-          id="search-input"
-          class="search-input"
-          placeholder="Search a task..."
+          placeholder="What's your goal today?"
         />
-        <button id="search-button" class="buttons">Search 🔎</button>
-      </div>
-      <div id="buttons">
-        <button id="sort-button" class="buttons">Sort By:</button>
-        <button id="dark-mode" class="buttons"></button>
-      </div>
-    </section>
-    <div class="to-do-header">
-      <section class="header-uncompleted">
-        <h3><span id="counter"></span> Uncompleted :</h3>
-        <div id="tasks-container" class="tasks">
-          <span id="empty-list-span"
-            >You're not going to do anything today? 🧐😕
-          </span>
+        <select id="priority-selector" class="formStyle">
+          <option disabled selected value>Importance</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <select id="priority-selector2" class="formStyle">
+          <option value="Normal">Normal task (default)</option>
+          <option value="Must">Must Do Today</option>
+          <option value="Quickly">10 min "Just Do It"</option>
+        </select>
+        <button id="add-button" class="formStyle" onclick="addTask()">
+          Add
+        </button>
+      </form>
+      <section class="second-part">
+        <div>
+          <input
+            type="text"
+            id="search-input"
+            class="search-input"
+            placeholder="Search a task..."
+          />
+          <button id="search-button" class="buttons">Search 🔎</button>
+        </div>
+        <div id="buttons">
+          <button id="sort-button" class="buttons">Sort By:</button>
+          <button id="dark-mode" class="buttons">Dark mode</button>
         </div>
       </section>
-      <section class="header-completed">
-        <h3 id="hide-list"><span id="counter-done"></span> Completed :</h3>
-        <div id="tasks-done-container" class="tasks">
-          <span id="empty-list-done-span"
-            >Stop being lazy! Finish a task 😎😎</span
-          >
-        </div>
-        <button id="clear" class="buttons">Clear All ⌦</button>
-      </section>
-    </div>
-    <label for="notes" class="labelComments"> Notes :</label><br /><br />
-    <textarea
-      class="notes"
-      id="comment"
-      cols="50"
-      rows="13"
-      placeholder="Anything you wanna remember?"
-      onmouseout="saveNote()"
-    ></textarea>
-    <nav class="floating-menu">
-      <h3>Get in touch!</h3>
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-      />
-      <a
-        href="https://www.facebook.com/amit.benyaakov.3"
-        target="_blank"
-        class="fa fa-facebook"
-      ></a>
-      <a
-        href="https://github.com/amitby98"
-        target="_blank"
-        class="fa fa-github"
-      ></a>
-      <a
-        href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox"
-        target="_blank"
-        class="fa fa-google"
-      ></a>
-      <a
-        href="https://www.instagram.com/amit_by98/"
-        target="_blank"
-        class="fa fa-instagram"
-      ></a>
-    </nav>
-    <p class="main-paragraph">★ Style your list with the items below ★</p>
-    <p class="second-paragraph">
-      just drag and drop them whenever you want,<br />
-      You can return them to the box whenever you want!
-    </p>
-    <div class="carousel">
-      <!-- <button class="button" id="right">⇨</button> -->
-      <div id="images" class="imgs">
-        <ul class="img-list">
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/panic.jpeg"
-              id="image1"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/smallSteps.jpeg"
-              id="image2"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/pinkP.jpeg"
-              id="image3"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/makeToday.jpeg"
-              id="image4"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/rock.jpeg"
-              id="image5"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/bornTo.jpeg"
-              id="image6"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              class="img7"
-              src="./pics/wow.jpeg"
-              id="image7"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/nirvana.jpeg"
-              id="image8"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/clock.jpeg"
-              id="image9"
-            />
-          </li>
-          <li>
-            <img
-              ondragstart="return false;"
-              onmousedown="startDrag(event)"
-              class="img-option"
-              src="./pics/oneThing.jpeg"
-              id="image10"
-            />
-          </li>
-        </ul>
+      <div class="to-do-header">
+        <section class="header-uncompleted">
+          <h3><span id="counter"></span> Uncompleted :</h3>
+          <div id="tasks-container" class="tasks">
+            <span id="empty-list-span"
+              >You're not going to do anything today? 🧐😕
+            </span>
+          </div>
+        </section>
+        <section class="header-completed">
+          <h3 id="hide-list"><span id="counter-done"></span> Completed :</h3>
+          <div id="tasks-done-container" class="tasks">
+            <span id="empty-list-done-span"
+              >Stop being lazy! Finish a task 😎😎</span
+            >
+          </div>
+          <button id="clear" class="buttons">Clear All ⌦</button>
+        </section>
       </div>
-      <!-- <button class="button" id="left">⇦</button> -->
+      <label for="notes" class="labelComments"> Notes :</label><br /><br />
+      <textarea
+        class="notes"
+        id="comment"
+        cols="50"
+        rows="13"
+        placeholder="Anything you wanna remember?"
+        onmouseout="saveNote()"
+      ></textarea>
+      <nav class="floating-menu">
+        <h3>Get in touch!</h3>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+        <a
+          href="https://www.facebook.com/amit.benyaakov.3"
+          target="_blank"
+          class="fa fa-facebook"
+        ></a>
+        <a
+          href="https://github.com/amitby98"
+          target="_blank"
+          class="fa fa-github"
+        ></a>
+        <a
+          href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox"
+          target="_blank"
+          class="fa fa-google"
+        ></a>
+        <a
+          href="https://www.instagram.com/amit_by98/"
+          target="_blank"
+          class="fa fa-instagram"
+        ></a>
+      </nav>
+      <p class="main-paragraph">★ Style your list with the items below ★</p>
+      <p class="second-paragraph">
+        just drag and drop them whenever you want,<br />
+        You can return them to the box whenever you want!
+      </p>
+      <div class="carousel">
+        <!-- <button class="button" id="right">⇨</button> -->
+        <div id="images" class="imgs">
+          <ul class="img-list">
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/panic.jpeg"
+                id="image1"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/smallSteps.jpeg"
+                id="image2"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/pinkP.jpeg"
+                id="image3"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/makeToday.jpeg"
+                id="image4"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/rock.jpeg"
+                id="image5"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/bornTo.jpeg"
+                id="image6"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                class="img7"
+                src="./pics/wow.jpeg"
+                id="image7"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/nirvana.jpeg"
+                id="image8"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/clock.jpeg"
+                id="image9"
+              />
+            </li>
+            <li>
+              <img
+                ondragstart="return false;"
+                onmousedown="startDrag(event)"
+                class="img-option"
+                src="./pics/oneThing.jpeg"
+                id="image10"
+              />
+            </li>
+          </ul>
+        </div>
+        <!-- <button class="button" id="left">⇦</button> -->
+      </div>
     </div>
     <script src="./main.js"></script>
   </body>
