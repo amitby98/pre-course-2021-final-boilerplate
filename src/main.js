@@ -10,9 +10,16 @@ let appData = {
 };
 
 // This function loads the data from the JSON.BIN and then create the DOM elements
-async function loadTasks() {
-  // first - get the data from the json.bin
-  appData = await getPersistent(MY_BIN_ID);
+function loadTasks() {
+  document.getElementById("spinner").style.display = "block";
+  document.getElementById("content").style.display = "none";
+  getPersistent(MY_BIN_ID).then((response) => {
+    response.json().then(loadTasksCallback);
+  });
+}
+
+function loadTasksCallback(result) {
+  appData = result.record;
 
   if (!appData.idCounter) {
     appData.idCounter = 0;
@@ -21,14 +28,14 @@ async function loadTasks() {
   let taskDiv = document.getElementById("tasks-container");
   let taskDoneDiv = document.getElementById("tasks-done-container");
   // second - create the todo list
-  appData["my-todo"].forEach(async (taskObject) => {
-    let div = await createTaskDomElements(taskObject, false);
+  appData["my-todo"].forEach((taskObject) => {
+    let div = createTaskDomElements(taskObject, false);
     taskDiv.appendChild(div);
   });
 
   // third- create the done list
-  appData?.done?.forEach(async (taskObject) => {
-    let div = await createTaskDomElements(taskObject, true);
+  appData?.done?.forEach((taskObject) => {
+    let div = createTaskDomElements(taskObject, true);
     taskDoneDiv.appendChild(div);
   });
 
@@ -47,6 +54,8 @@ async function loadTasks() {
     }
   }
   counterUpdated();
+  document.getElementById("spinner").style.display = "none";
+  document.getElementById("content").style.display = "block";
 }
 
 //drag and drop settings
@@ -91,7 +100,7 @@ function startDrag(event) {
 }
 
 //function that save the note
-async function saveNote() {
+function saveNote() {
   appData.note = document.getElementById("comment").value;
   document.getElementById("comment").value = appData.note;
 
@@ -100,7 +109,7 @@ async function saveNote() {
 
 // this function gets a task object and create a div with all the elements of the task inside
 // the function returns the div container of the task
-async function createTaskDomElements(taskObject, isChecked) {
+function createTaskDomElements(taskObject, isChecked) {
   // create the div checkbox
   let input = document.createElement("input");
   input.type = "checkbox";
@@ -382,7 +391,7 @@ function counterUpdated() {
 }
 
 //function to add tasks
-async function addTask() {
+function addTask() {
   let task = document.getElementsByTagName("input")[0].value;
   let taskDiv = document.getElementById("tasks-container");
 
@@ -405,7 +414,7 @@ async function addTask() {
       type: typeInput,
       id: "my-todo" + appData.idCounter,
     };
-    let div = await createTaskDomElements(taskObject, false);
+    let div = createTaskDomElements(taskObject, false);
 
     // add the todo-container to the div task list
     taskDiv.appendChild(div);
@@ -417,7 +426,17 @@ async function addTask() {
 
     // save the task to jsonBin
     appData["my-todo"].push(taskObject);
-    await setPersistent(MY_BIN_ID, appData);
+    setPersistent(MY_BIN_ID, appData);
+    // const result = setPersistent(MY_BIN_ID, appData);
+    // result.catch((resolve, reject) => {
+    //   if (!resolve) appData["my-todo"].push(taskObject);
+    //   else {
+    //     alert("Error");
+    //   }
+    //   console.log(resolve);
+    //   console.log(reject);
+    //   console.log(result);
+    // });
 
     // update counters
     appData.idCounter++;
