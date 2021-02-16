@@ -8,9 +8,11 @@ let appData = {
   idCounter: 0,
   note: "",
 };
+let loading = false;
 
 // This function loads the data from the JSON.BIN and then create the DOM elements
 function loadTasks() {
+  loading = true;
   document.getElementById("spinner").style.display = "block";
   document.getElementById("content").style.display = "none";
   getPersistent(MY_BIN_ID).then((response) => {
@@ -56,10 +58,13 @@ function loadTasksCallback(result) {
   counterUpdated();
   document.getElementById("spinner").style.display = "none";
   document.getElementById("content").style.display = "block";
+  loading = false;
 }
 
 //drag and drop settings
 function startDrag(event) {
+  if (loading) return;
+
   dragImage = event.target;
   let shiftX = event.clientX - dragImage.getBoundingClientRect().left;
   let shiftY = event.clientY - dragImage.getBoundingClientRect().top;
@@ -95,7 +100,7 @@ function startDrag(event) {
       left: dragImage.style.left,
       top: dragImage.style.top,
     };
-    setPersistent(MY_BIN_ID, appData);
+    handleSave();
   };
 }
 
@@ -104,7 +109,7 @@ function saveNote() {
   appData.note = document.getElementById("comment").value;
   document.getElementById("comment").value = appData.note;
 
-  setPersistent(MY_BIN_ID, appData);
+  handleSave();
 }
 
 // this function gets a task object and create a div with all the elements of the task inside
@@ -115,6 +120,7 @@ function createTaskDomElements(taskObject, isChecked) {
   input.type = "checkbox";
   input.id = taskObject.id;
   input.className = "checkbox";
+  input.classList.add("btnDisableOnSave");
   input.checked = isChecked;
   input.onclick = taskChecked;
 
@@ -141,6 +147,7 @@ function createTaskDomElements(taskObject, isChecked) {
   // create the remove button
   let removeButton = document.createElement("button");
   removeButton.className = "remove-button";
+  removeButton.classList.add("btnDisableOnSave");
   removeButton.innerText = "❌";
   removeButton.addEventListener("click", (e) => {
     let localId = input.id;
@@ -156,7 +163,7 @@ function createTaskDomElements(taskObject, isChecked) {
       appData["my-todo"].splice(appData["my-todo"].indexOf(taskObject), 1);
     }
 
-    setPersistent(MY_BIN_ID, appData);
+    handleSave();
     counterUpdated();
   });
 
@@ -204,7 +211,7 @@ filterButton.addEventListener("click", (e) => {
 clearButton.addEventListener("click", (e) => {
   document.getElementById("counter-done").innerText = "0";
   removeDone();
-  setPersistent(MY_BIN_ID, appData);
+  handleSave();
 });
 
 //function to reset all the completed tasks
@@ -345,6 +352,7 @@ function sortByType(increase) {
 function getEditTaskButton(todoDiv, textDiv) {
   let editButton = document.createElement("button");
   editButton.className = "edit-button";
+  editButton.classList.add("btnDisableOnSave");
   editButton.innerText = "✏️";
   todoDiv.appendChild(editButton);
   editButton.addEventListener("click", (e) => {
@@ -366,7 +374,7 @@ function getEditTaskButton(todoDiv, textDiv) {
       taskObject = appData.done.find((task) => task.id == taskId);
       taskObject.text = newText;
     }
-    setPersistent(MY_BIN_ID, appData);
+    handleSave();
   });
 }
 
@@ -426,22 +434,38 @@ function addTask() {
 
     // save the task to jsonBin
     appData["my-todo"].push(taskObject);
-    setPersistent(MY_BIN_ID, appData);
-    // const result = setPersistent(MY_BIN_ID, appData);
-    // result.catch((resolve, reject) => {
-    //   if (!resolve) appData["my-todo"].push(taskObject);
-    //   else {
-    //     alert("Error");
-    //   }
-    //   console.log(resolve);
-    //   console.log(reject);
-    //   console.log(result);
-    // });
+    handleSave();
 
     // update counters
     appData.idCounter++;
     counterUpdated();
   }
+}
+
+// function to save all data and show the spinner
+function handleSave() {
+  loading = true;
+  document.getElementById("save-spinner").style.display = "block";
+  let eleArr = document.getElementsByClassName("btnDisableOnSave");
+  for (let i = 0; i < eleArr.length; i++) eleArr[i].disabled = true;
+  setPersistent(MY_BIN_ID, appData)
+    .then((response) => {
+      if (response.status == 200) {
+        document.getElementById("save-spinner").style.display = "none";
+        let eleArr = document.getElementsByClassName("btnDisableOnSave");
+        for (let i = 0; i < eleArr.length; i++) eleArr[i].disabled = false;
+        loading = false;
+      } else {
+        alert(
+          "There was a problem with saving your change in the server, please refresh page and try again later."
+        );
+      }
+    })
+    .catch((result) => {
+      alert(
+        "There was a problem with saving your change in the server, please refresh page and try again later."
+      );
+    });
 }
 
 //function to update items counter
@@ -468,7 +492,7 @@ function taskChecked(event) {
     appData["my-todo"].splice(appData["my-todo"].indexOf(taskObject), 1);
     appData.done.push(taskObject);
   }
-  setPersistent(MY_BIN_ID, appData);
+  handleSave();
   counterUpdated();
 }
 
