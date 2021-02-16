@@ -29,6 +29,9 @@ h3 {
   padding-bottom: 20px;
   font-size: 25px;
   background-color: rgb(199, 199, 165);
+  height: 500px;
+  width: 630px;
+  overflow: scroll;
 }
 .header-completed {
   border: 5px solid;
@@ -39,6 +42,9 @@ h3 {
   padding-bottom: 20px;
   font-size: 25px;
   background-color: rgb(199, 199, 165);
+  height: 500px;
+  width: 630px;
+  overflow: scroll;
 }
 .todo-priority {
   padding-right: 2px;
