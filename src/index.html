@@ -32,7 +32,11 @@
           <option value="Must">Must Do Today</option>
           <option value="Quickly">10 min "Just Do It"</option>
         </select>
-        <button id="add-button" class="formStyle" onclick="addTask()">
+        <button
+          id="add-button"
+          class="formStyle btnDisableOnSave"
+          onclick="addTask()"
+        >
           Add
         </button>
       </form>
@@ -45,6 +49,10 @@
             placeholder="Search a task..."
           />
           <button id="search-button" class="buttons">Search 🔎</button>
+        </div>
+        <div style="display: none" id="save-spinner">
+          <div class="loader"></div>
+          <div>Saving...</div>
         </div>
         <div id="buttons">
           <button id="sort-button" class="buttons">Sort By:</button>
@@ -67,12 +75,14 @@
               >Stop being lazy! Finish a task 😎😎</span
             >
           </div>
-          <button id="clear" class="buttons">Clear All ⌦</button>
+          <button id="clear" class="buttons btnDisableOnSave">
+            Clear All ⌦
+          </button>
         </section>
       </div>
       <label for="notes" class="labelComments"> Notes :</label><br /><br />
       <textarea
-        class="notes"
+        class="notes btnDisableOnSave"
         id="comment"
         cols="50"
         rows="13"
@@ -112,7 +122,6 @@
         You can return them to the box whenever you want!
       </p>
       <div class="carousel">
-        <!-- <button class="button" id="right">⇨</button> -->
         <div id="images" class="imgs">
           <ul class="img-list">
             <li>
@@ -208,7 +217,6 @@
             </li>
           </ul>
         </div>
-        <!-- <button class="button" id="left">⇦</button> -->
       </div>
     </div>
     <script src="./main.js"></script>
