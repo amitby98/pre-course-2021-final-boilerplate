@@ -23,5 +23,8 @@
     "nock": "^13.0.6",
     "nock-puppeteer": "^1.0.2",
     "puppeteer": "^4.0.0"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security"
   }
 }
