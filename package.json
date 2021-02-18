@@ -25,6 +25,7 @@
     "puppeteer": "^4.0.0"
   },
   "dependencies": {
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "uuid": "^8.3.2"
   }
 }

@@ -1,39 +1,18 @@
 /** @format */
-
+const uuid = require("uuid");
 const express = require("express");
 const fs = require("fs");
 const app = express();
-// app.use(express.json());
+app.use(express.json());
 const port = 3000;
-
-// app.get("/api/date/now", (req, res) => {
-//   res.send("17.2.2021");
-// });
-
-// let list = {
-//   task1: "first task",
-//   task2: "second task",
-// };
 
 app.get("/v3/b/:id", (req, res) => {
   let id = req.params.id;
-  const backendContent = fs.readFileSync(`./backend/${id}.json`);
-  res.send(backendContent);
-});
-
-// app.post("/b", (req, res) => {
-//   console.log(list[id]);
-//   res.send(list[id]);
-// });
-app.put("/v3/b/:id", (req, res) => {
-  const body = req.body;
-  const id = req.params.id;
-
-  if (id) {
-    id = body;
-    res.send(id);
-  } else {
-    res.sendStatus(404);
+  try {
+    const backendContent = fs.readFileSync(`./${id}.json`);
+    res.send(backendContent);
+  } catch (e) {
+    res.status(422).json({ message: "Invalid Record ID" });
   }
 });
 
