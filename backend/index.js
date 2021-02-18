@@ -16,6 +16,16 @@ app.get("/v3/b/:id", (req, res) => {
   }
 });
 
+app.delete("/v3/b/:id", (req, res) => {
+  let id = req.params.id;
+  try {
+    fs.unlinkSync(`./${id}.json`);
+    res.send(true);
+  } catch (e) {
+    res.status(422).json({ message: "Invalid Record ID" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
