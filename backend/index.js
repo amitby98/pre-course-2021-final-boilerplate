@@ -7,6 +7,23 @@ const dir = "./backend";
 app.use(express.json());
 const port = 3000;
 
+app.get("/v3/b", (req, res) => {
+  const dirContent = [];
+  try {
+    fs.readdir(dir, (err, files) => {
+      if (!files) {
+        res.status(200).send("No files to show");
+      }
+      for (file of files) {
+        const fileContent = JSON.parse(fs.readFileSync(`./backend/${file}`));
+        let temp = fileContent.body;
+        dirContent.push(temp);
+      }
+      res.status(200).send(JSON.stringify(binsContent));
+    });
+  } catch (err) {}
+});
+
 app.get("/v3/b/:id", (req, res) => {
   let id = req.params.id;
   try {
