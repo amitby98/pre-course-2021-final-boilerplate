@@ -2,9 +2,11 @@
 const uuid = require("uuid");
 const express = require("express");
 const fs = require("fs");
+const cors = require("cors");
 const app = express();
 const dir = "./bins";
 app.use(express.json());
+app.use(cors());
 const port = 3000;
 
 //a GET request to /b returns a list of objects

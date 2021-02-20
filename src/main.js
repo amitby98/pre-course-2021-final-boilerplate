@@ -5,7 +5,6 @@ let idMap = {};
 let appData = {
   "my-todo": [],
   done: [],
-  idCounter: 0,
   note: "",
 };
 let loading = false;
@@ -15,17 +14,15 @@ function loadTasks() {
   loading = true;
   document.getElementById("spinner").style.display = "block";
   document.getElementById("content").style.display = "none";
-  getPersistent(MY_BIN_ID).then((response) => {
+  getPersistent().then((response) => {
     response.json().then(loadTasksCallback);
   });
 }
 
 function loadTasksCallback(result) {
-  appData = result.record;
-
-  if (!appData.idCounter) {
-    appData.idCounter = 0;
-  }
+  console.log(result);
+  appData["my-todo"] = result.filter((task) => task.checked == false);
+  appData["done"] = result.filter((task) => task.checked == true);
 
   let taskDiv = document.getElementById("tasks-container");
   let taskDoneDiv = document.getElementById("tasks-done-container");
@@ -149,21 +146,22 @@ function createTaskDomElements(taskObject, isChecked) {
   removeButton.className = "remove-button";
   removeButton.classList.add("btnDisableOnSave");
   removeButton.innerText = "❌";
-  removeButton.addEventListener("click", (e) => {
+  removeButton.addEventListener("click", async (e) => {
     let localId = input.id;
     if (input.checked) {
-      document.getElementById("tasks-done-container").removeChild(div);
-
       let taskObject = appData.done.find((x) => x.id == localId);
+      taskObject = await handleSave(taskObject, true);
+      if (taskObject == null) return;
       appData.done.splice(appData.done.indexOf(taskObject), 1);
+      document.getElementById("tasks-done-container").removeChild(div);
     } else {
-      document.getElementById("tasks-container").removeChild(div);
-
       let taskObject = appData["my-todo"].find((x) => x.id == localId);
+      taskObject = await handleSave(taskObject, true);
+      if (taskObject == null) return;
       appData["my-todo"].splice(appData["my-todo"].indexOf(taskObject), 1);
+      document.getElementById("tasks-container").removeChild(div);
     }
 
-    handleSave();
     counterUpdated();
   });
 
@@ -208,22 +206,27 @@ filterButton.addEventListener("click", (e) => {
 });
 
 //clear all button
-clearButton.addEventListener("click", (e) => {
+clearButton.addEventListener("click", async (e) => {
   document.getElementById("counter-done").innerText = "0";
-  removeDone();
-  handleSave();
+  await removeDone();
+  //handleSave();
 });
 
 //function to reset all the completed tasks
-function removeDone() {
+async function removeDone() {
+  for (let i = 0; i < appData["done"].length; i++) {
+    let task = appData["done"][i];
+    task = await handleSave(task, true);
+    if (task == null) return;
+  }
+  appData.done = [];
   let taskDoneDiv = document.getElementById("tasks-done-container");
   let array = taskDoneDiv.getElementsByClassName("todo-container");
   for (let i = 0; i < array.length; i++) {
-    let task = array[i];
+    array[i].remove();
     i--;
-    task.remove();
   }
-  appData.done = [];
+  counterUpdated();
 }
 
 //dark mode button
@@ -355,26 +358,27 @@ function getEditTaskButton(todoDiv, textDiv) {
   editButton.classList.add("btnDisableOnSave");
   editButton.innerText = "✏️";
   todoDiv.appendChild(editButton);
-  editButton.addEventListener("click", (e) => {
+  editButton.addEventListener("click", async (e) => {
     let newText = window.prompt("Type your changes.");
     if (newText.length >= 1) {
       if (newText.length > 40) {
         alert("Your new task text is too long!");
       } else {
+        let taskId = e.target.parentNode.getElementsByTagName("input")[0].id;
+        let taskObject = appData["my-todo"].find((task) => task.id == taskId);
+        if (taskObject) {
+          taskObject.text = newText;
+        } else {
+          taskObject = appData.done.find((task) => task.id == taskId);
+          taskObject.text = newText;
+        }
+        taskObject = await handleSave(taskObject);
+        if (!taskObject) return;
         textDiv.innerText = newText;
       }
     } else {
       alert("New task is too short!");
     }
-    let taskId = e.target.parentNode.getElementsByTagName("input")[0].id;
-    let taskObject = appData["my-todo"].find((task) => task.id == taskId);
-    if (taskObject) {
-      taskObject.text = newText;
-    } else {
-      taskObject = appData.done.find((task) => task.id == taskId);
-      taskObject.text = newText;
-    }
-    handleSave();
   });
 }
 
@@ -399,7 +403,7 @@ function counterUpdated() {
 }
 
 //function to add tasks
-function addTask() {
+async function addTask() {
   let task = document.getElementsByTagName("input")[0].value;
   let taskDiv = document.getElementById("tasks-container");
 
@@ -420,8 +424,15 @@ function addTask() {
       priority: priorityInput,
       date,
       type: typeInput,
-      id: "my-todo" + appData.idCounter,
+      checked: false,
     };
+
+    // save the task to jsonBin
+    taskObject = await handleSave(taskObject);
+    if (!taskObject) {
+      return;
+    }
+    appData["my-todo"].push(taskObject);
     let div = createTaskDomElements(taskObject, false);
 
     // add the todo-container to the div task list
@@ -432,44 +443,50 @@ function addTask() {
     document.getElementsByTagName("select")[0].value = "";
     document.getElementsByTagName("select")[1].value = "Normal";
 
-    // save the task to jsonBin
-    appData["my-todo"].push(taskObject);
-    handleSave();
-
     // update counters
-    appData.idCounter++;
     counterUpdated();
   }
 }
 
 // function to save all data and show the spinner
-function handleSave() {
+async function handleSave(taskObject, toDelete = false) {
   loading = true;
   document.getElementById("save-spinner").style.display = "block";
   let eleArr = document.getElementsByClassName("btnDisableOnSave");
   for (let i = 0; i < eleArr.length; i++) eleArr[i].disabled = true;
-  setPersistent(MY_BIN_ID, appData)
-    .then((response) => {
-      if (response.status == 200) {
-        document.getElementById("save-spinner").style.display = "none";
-        let eleArr = document.getElementsByClassName("btnDisableOnSave");
-        for (let i = 0; i < eleArr.length; i++) eleArr[i].disabled = false;
-        loading = false;
-      } else {
-        alert(
-          "There was a problem with saving your change in the server, please refresh page and try again later."
-        );
+
+  try {
+    if (toDelete) {
+      let response = await deleteObject(taskObject);
+      if (response.status != 200) {
+        alert("There was a problem with saving your change in the server");
+        taskObject = null;
       }
-    })
-    .catch((result) => {
-      alert(
-        "There was a problem with saving your change in the server, please refresh page and try again later."
-      );
-    });
+    } else {
+      let response = await setPersistent(taskObject);
+      if (response.status == 200) {
+        taskObject = await response.json();
+      } else {
+        alert("There was a problem with saving your change in the server");
+        taskObject = null;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    alert("There was a problem with saving your change in the server.");
+    taskObject = null;
+  } finally {
+    document.getElementById("save-spinner").style.display = "none";
+    let eleArr = document.getElementsByClassName("btnDisableOnSave");
+    for (let i = 0; i < eleArr.length; i++) eleArr[i].disabled = false;
+    loading = false;
+  }
+
+  return taskObject;
 }
 
 //function to update items counter
-function taskChecked(event) {
+async function taskChecked(event) {
   let div = event.target.parentNode;
   let taskDiv = document.getElementById("tasks-container");
   let taskDoneDiv = document.getElementById("tasks-done-container");
@@ -479,20 +496,27 @@ function taskChecked(event) {
 
   let localId = event.target.id;
   if (!event.target.checked) {
-    taskDiv.appendChild(div);
-
     let taskObject = appData.done.find((x) => x.id == localId);
+    taskObject.checked = event.target.checked;
+    let taskObjectFromServer = await handleSave(taskObject);
+    if (taskObjectFromServer == null) {
+      return;
+    }
     appData.done.splice(appData.done.indexOf(taskObject), 1);
     appData["my-todo"].push(taskObject);
+    taskDiv.appendChild(div);
   } else {
-    taskDoneDiv.appendChild(div);
-
     let taskObject = appData["my-todo"].find((x) => x.id == localId);
-
+    taskObject.checked = event.target.checked;
+    let taskObjectFromServer = await handleSave(taskObject);
+    if (taskObjectFromServer == null) {
+      return;
+    }
     appData["my-todo"].splice(appData["my-todo"].indexOf(taskObject), 1);
     appData.done.push(taskObject);
+    taskDoneDiv.appendChild(div);
   }
-  handleSave();
+
   counterUpdated();
 }
 
