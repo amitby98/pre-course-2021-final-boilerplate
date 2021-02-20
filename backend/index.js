@@ -7,6 +7,7 @@ const dir = "./bins";
 app.use(express.json());
 const port = 3000;
 
+//a GET request to /b returns a list of objects
 app.get("/v3/b", (req, res) => {
   const dirContent = [];
   try {
@@ -21,6 +22,7 @@ app.get("/v3/b", (req, res) => {
   } catch (err) {}
 });
 
+//a GET request to /b/{id} returns the details of the object 123
 app.get("/v3/b/:id", (req, res) => {
   let id = req.params.id;
   try {
@@ -31,6 +33,7 @@ app.get("/v3/b/:id", (req, res) => {
   }
 });
 
+//a DELETE request to /b/{id} delete a object
 app.delete("/v3/b/:id", (req, res) => {
   let id = req.params.id;
   try {
@@ -41,6 +44,7 @@ app.delete("/v3/b/:id", (req, res) => {
   }
 });
 
+//a POST request to /b create new object and return the new object
 app.post("/v3/b", (req, res) => {
   if (!req.body || !req.body.text || !req.body.priority) {
     return res.status(400).json({ message: "please send correct body" });
@@ -63,6 +67,7 @@ app.post("/v3/b", (req, res) => {
   res.send(req.body);
 });
 
+//a PUT request to /b/{id} get in the body params updated object and return the updated object
 app.put("/v3/b/:id", (req, res) => {
   if (!req.body || !req.body.text || !req.body.priority) {
     return res.status(400).json({ message: "please send correct body" });
