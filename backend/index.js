@@ -3,7 +3,7 @@ const uuid = require("uuid");
 const express = require("express");
 const fs = require("fs");
 const app = express();
-const dir = "./backend";
+const dir = "./bins";
 app.use(express.json());
 const port = 3000;
 
@@ -11,15 +11,12 @@ app.get("/v3/b", (req, res) => {
   const dirContent = [];
   try {
     fs.readdir(dir, (err, files) => {
-      if (!files) {
-        res.status(200).send("No files to show");
-      }
       for (file of files) {
-        const fileContent = JSON.parse(fs.readFileSync(`./backend/${file}`));
-        let temp = fileContent.body;
+        const fileContent = JSON.parse(fs.readFileSync(`./bins/${file}`));
+        let temp = fileContent;
         dirContent.push(temp);
       }
-      res.status(200).send(JSON.stringify(binsContent));
+      res.status(200).send(JSON.stringify(dirContent));
     });
   } catch (err) {}
 });
@@ -27,7 +24,7 @@ app.get("/v3/b", (req, res) => {
 app.get("/v3/b/:id", (req, res) => {
   let id = req.params.id;
   try {
-    const backendContent = fs.readFileSync(`./${id}.json`);
+    const backendContent = fs.readFileSync(`./bins/${id}.json`);
     res.send(backendContent);
   } catch (e) {
     res.status(422).json({ message: "Invalid Record ID" });
@@ -37,7 +34,7 @@ app.get("/v3/b/:id", (req, res) => {
 app.delete("/v3/b/:id", (req, res) => {
   let id = req.params.id;
   try {
-    fs.unlinkSync(`./${id}.json`);
+    fs.unlinkSync(`./bins/${id}.json`);
     res.send(true);
   } catch (e) {
     res.status(422).json({ message: "Invalid Record ID" });
@@ -51,13 +48,18 @@ app.post("/v3/b", (req, res) => {
   req.body.id = uuid.v4();
   let jsonContent = JSON.stringify(req.body);
   console.log(jsonContent);
-  fs.writeFile(`./${req.body.id}.json`, jsonContent, "utf8", function (err) {
-    if (err) {
-      console.log("An error occur while writing JSON Object to File.");
-      return console.log(err);
+  fs.writeFile(
+    `./bins/${req.body.id}.json`,
+    jsonContent,
+    "utf8",
+    function (err) {
+      if (err) {
+        console.log("An error occur while writing JSON Object to File.");
+        return console.log(err);
+      }
+      console.log("JSON file has been saved.");
     }
-    console.log("JSON file has been saved.");
-  });
+  );
   res.send(req.body);
 });
 
@@ -76,17 +78,22 @@ app.put("/v3/b/:id", (req, res) => {
   let jsonContent = JSON.stringify(req.body);
   console.log(jsonContent);
 
-  if (!fs.existsSync(`./${req.body.id}.json`)) {
+  if (!fs.existsSync(`./bins/${req.body.id}.json`)) {
     return res.status(422).json({ message: "id is not exists" });
   }
 
-  fs.writeFile(`./${req.body.id}.json`, jsonContent, "utf8", function (err) {
-    if (err) {
-      console.log("An error occur while writing JSON Object to File.");
-      return console.log(err);
+  fs.writeFile(
+    `./bins/${req.body.id}.json`,
+    jsonContent,
+    "utf8",
+    function (err) {
+      if (err) {
+        console.log("An error occur while writing JSON Object to File.");
+        return console.log(err);
+      }
+      console.log("JSON file has been saved.");
     }
-    console.log("JSON file has been saved.");
-  });
+  );
   res.send(req.body);
 });
 
