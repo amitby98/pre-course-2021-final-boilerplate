@@ -2,9 +2,6 @@
 function getPersistent() {
   return fetch("http://localhost:3000/v3/b/", {
     method: "GET",
-    //headers: {
-    // "X-Master-Key": API_KEY,
-    //},
   });
 }
 
