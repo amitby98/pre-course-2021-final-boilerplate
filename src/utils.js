@@ -9,8 +9,6 @@ function getPersistent(key) {
       "X-Master-Key": API_KEY,
     },
   });
-  //console.log(response);
-  //console.log(response.body);
 }
 
 // Saves the given data into persistent storage by the given key.
