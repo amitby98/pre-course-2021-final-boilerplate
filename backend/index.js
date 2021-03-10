@@ -16,6 +16,7 @@ app.get("/v3/b", (req, res) => {
     fs.readdir(dir, (err, files) => {
       for (file of files) {
         const fileContent = JSON.parse(fs.readFileSync(`./bins/${file}`));
+        console.log(fileContent);
         let temp = fileContent;
         dirContent.push(temp);
       }
@@ -38,11 +39,15 @@ app.get("/v3/b/:id", (req, res) => {
 //a DELETE request to /b/{id} delete a object
 app.delete("/v3/b/:id", (req, res) => {
   let id = req.params.id;
-  try {
-    fs.unlinkSync(`./bins/${id}.json`);
-    res.send(true);
-  } catch (e) {
-    res.status(422).json({ message: "Invalid Record ID" });
+  if (!id || id === "" || id === "undefined") {
+    res.status(422).json({ message: "please send an id" });
+  } else {
+    try {
+      fs.unlinkSync(`./bins/${id}.json`);
+      res.send(true);
+    } catch (e) {
+      res.status(404).json({ message: "Invalid Record ID" });
+    }
   }
 });
 
@@ -71,6 +76,14 @@ app.post("/v3/b", (req, res) => {
 
 //a PUT request to /b/{id} get in the body params updated object and return the updated object
 app.put("/v3/b/:id", (req, res) => {
+  if (
+    req.params.id == undefined ||
+    req.params.id == null ||
+    req.params.id === "" ||
+    req.params.id.length != 36
+  ) {
+    return res.status(422).json({ message: "please send an correct id" });
+  }
   if (!req.body || !req.body.text || !req.body.priority) {
     return res.status(400).json({ message: "please send correct body" });
   }
@@ -86,7 +99,7 @@ app.put("/v3/b/:id", (req, res) => {
   console.log(jsonContent);
 
   if (!fs.existsSync(`./bins/${req.body.id}.json`)) {
-    return res.status(422).json({ message: "id is not exists" });
+    return res.status(404).json({ message: "id is not exists" });
   }
 
   fs.writeFile(

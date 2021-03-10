@@ -97,7 +97,7 @@ function startDrag(event) {
       left: dragImage.style.left,
       top: dragImage.style.top,
     };
-    handleSave();
+    // handleSave();
   };
 }
 
@@ -106,7 +106,7 @@ function saveNote() {
   appData.note = document.getElementById("comment").value;
   document.getElementById("comment").value = appData.note;
 
-  handleSave();
+  // handleSave();
 }
 
 // this function gets a task object and create a div with all the elements of the task inside
@@ -481,7 +481,6 @@ async function handleSave(taskObject, toDelete = false) {
     for (let i = 0; i < eleArr.length; i++) eleArr[i].disabled = false;
     loading = false;
   }
-
   return taskObject;
 }
 
@@ -516,7 +515,6 @@ async function taskChecked(event) {
     appData.done.push(taskObject);
     taskDoneDiv.appendChild(div);
   }
-
   counterUpdated();
 }
 
@@ -637,7 +635,6 @@ function highlight(text) {
           textIndexes[i + 1]
         )}`;
     }
-
     taskText.innerHTML = newInnerHTML;
   }
 }
